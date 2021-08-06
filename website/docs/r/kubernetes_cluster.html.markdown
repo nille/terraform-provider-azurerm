@@ -47,6 +47,8 @@ output "client_certificate" {
 
 output "kube_config" {
   value = azurerm_kubernetes_cluster.example.kube_config_raw
+
+  sensitive = true
 }
 ```
 
@@ -74,7 +76,7 @@ In addition, one of either `identity` or `service_principal` blocks must be spec
 
 ---
 
-* `automatic_channel_upgrade` - (Optional) The upgrade channel for this Kubernetes Cluster. Possible values are `patch`, `rapid`, and `stable`.
+* `automatic_channel_upgrade` - (Optional) The upgrade channel for this Kubernetes Cluster. Possible values are `patch`, `rapid`, `node-image` and `stable`.
 
 !> **Note:** Cluster Auto-Upgrade will update the Kubernetes Cluster (and it's Node Pools) to the latest GA version of Kubernetes automatically - please [see the Azure documentation for more information](https://docs.microsoft.com/en-us/azure/aks/upgrade-cluster#set-auto-upgrade-channel-preview).
 
@@ -101,6 +103,8 @@ In addition, one of either `identity` or `service_principal` blocks must be spec
 -> **NOTE:** Upgrading your cluster may take up to 10 minutes per node.
 
 * `linux_profile` - (Optional) A `linux_profile` block as defined below.
+
+* `maintenance_window` - (Optional) A `maintenance_window` block as defined below.
 
 * `network_profile` - (Optional) A `network_profile` block as defined below.
 
@@ -315,6 +319,8 @@ A `default_node_pool` block supports the following:
 
 * `kubelet_disk_type` - (Optional) The type of disk used by kubelet. At this time the only possible value is `OS`.
 
+* `local_account_disabled` - (Optional) Is local account disabled for AAD integrated kubernetes cluster?
+
 * `max_pods` - (Optional) The maximum number of pods that can run on each agent. Changing this forces a new resource to be created.
 
 * `node_public_ip_prefix_id` - (Optional) Resource ID for the Public IP Addresses Prefix for the nodes in this Node Pool. `enable_node_public_ip` should be `true`. Changing this forces a new resource to be created.
@@ -433,6 +439,30 @@ A `linux_profile` block supports the following:
 * `admin_username` - (Required) The Admin Username for the Cluster. Changing this forces a new resource to be created.
 
 * `ssh_key` - (Required) An `ssh_key` block. Only one is currently allowed. Changing this forces a new resource to be created.
+
+---
+
+A `maintenance_window` block supports the following:
+
+* `allowed` - (Optional) One or more `allowed` block as defined below.
+
+* `not_allowed` - (Optional) One or more `not_allowed` block as defined below.
+
+---
+
+An `allowed` block exports the following:
+
+* `day` - (Required) A day in a week. Possible values are `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` and `Saturday`.
+
+* `hours` - (Required) An array of hour slots in a day. Possible values are between `0` and `23`.
+
+---
+
+An `not_allowed` block exports the following:
+
+* `end` - (Required) The end of a time span, formatted as an RFC3339 string.
+
+* `start` - (Required) The start of a time span, formatted as an RFC3339 string.
 
 ---
 

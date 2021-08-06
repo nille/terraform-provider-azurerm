@@ -32,7 +32,7 @@ func TestFlexibleServerFirewallRuleName(t *testing.T) {
 			valid: true,
 		},
 		{
-			name:  "Start with `-`",
+			name:  "Start with `_`",
 			input: "_test",
 			valid: true,
 		},

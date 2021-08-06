@@ -303,6 +303,7 @@ func schemaAppServiceSiteConfig() *pluginsdk.Schema {
 						"v2.0",
 						"v4.0",
 						"v5.0",
+						"v6.0",
 					}, true),
 					DiffSuppressFunc: suppress.CaseDifference,
 				},
@@ -487,6 +488,15 @@ func schemaAppServiceSiteConfig() *pluginsdk.Schema {
 				"cors": SchemaWebCorsSettings(),
 
 				"auto_swap_slot_name": {
+					Type:     pluginsdk.TypeString,
+					Optional: true,
+				},
+				"acr_use_managed_identity_credentials": {
+					Type:     pluginsdk.TypeBool,
+					Optional: true,
+					Default:  false,
+				},
+				"acr_user_managed_identity_client_id": {
 					Type:     pluginsdk.TypeString,
 					Optional: true,
 				},
@@ -818,6 +828,14 @@ func schemaAppServiceDataSourceSiteConfig() *pluginsdk.Schema {
 							},
 						},
 					},
+				},
+				"acr_use_managed_identity_credentials": {
+					Type:     pluginsdk.TypeBool,
+					Computed: true,
+				},
+				"acr_user_managed_identity_client_id": {
+					Type:     pluginsdk.TypeString,
+					Computed: true,
 				},
 			},
 		},
@@ -1773,6 +1791,14 @@ func expandAppServiceSiteConfig(input interface{}) (*web.SiteConfig, error) {
 		siteConfig.AutoSwapSlotName = utils.String(v.(string))
 	}
 
+	if v, ok := config["acr_use_managed_identity_credentials"]; ok {
+		siteConfig.AcrUseManagedIdentityCreds = utils.Bool(v.(bool))
+	}
+
+	if v, ok := config["acr_user_managed_identity_client_id"]; ok {
+		siteConfig.AcrUserManagedIdentityID = utils.String(v.(string))
+	}
+
 	return siteConfig, nil
 }
 
@@ -1882,6 +1908,14 @@ func flattenAppServiceSiteConfig(input *web.SiteConfig) []interface{} {
 
 	if input.AutoSwapSlotName != nil {
 		result["auto_swap_slot_name"] = *input.AutoSwapSlotName
+	}
+
+	if input.AcrUseManagedIdentityCreds != nil {
+		result["acr_use_managed_identity_credentials"] = *input.AcrUseManagedIdentityCreds
+	}
+
+	if input.AcrUserManagedIdentityID != nil {
+		result["acr_user_managed_identity_client_id"] = *input.AcrUserManagedIdentityID
 	}
 
 	return append(results, result)

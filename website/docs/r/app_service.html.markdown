@@ -189,7 +189,7 @@ A `site_config` block supports the following:
 
 * `default_documents` - (Optional) The ordering of default documents to load, if an address isn't specified.
 
-* `dotnet_framework_version` - (Optional) The version of the .net framework's CLR used in this App Service. Possible values are `v2.0` (which will use the latest version of the .net framework for the .net CLR v2 - currently `.net 3.5`), `v4.0` (which corresponds to the latest version of the .net CLR v4 - which at the time of writing is `.net 4.7.1`) and `v5.0`. [For more information on which .net CLR version to use based on the .net framework you're targeting - please see this table](https://en.wikipedia.org/wiki/.NET_Framework_version_history#Overview). Defaults to `v4.0`.
+* `dotnet_framework_version` - (Optional) The version of the .net framework's CLR used in this App Service. Possible values are `v2.0` (which will use the latest version of the .net framework for the .net CLR v2 - currently `.net 3.5`), `v4.0` (which corresponds to the latest version of the .net CLR v4 - which at the time of writing is `.net 4.7.1`), `v5.0` and `v6.0`. [For more information on which .net CLR version to use based on the .net framework you're targeting - please see this table](https://en.wikipedia.org/wiki/.NET_Framework_version_history#Overview). Defaults to `v4.0`.
 
 * `ftps_state` - (Optional) State of FTP / FTPS service for this App Service. Possible values include: `AllAllowed`, `FtpsOnly` and `Disabled`.
 
@@ -246,6 +246,12 @@ A `site_config` block supports the following:
 ~> **NOTE:** when using an App Service Plan in the `Free` or `Shared` Tiers `use_32_bit_worker_process` must be set to `true`.
 
 * `websockets_enabled` - (Optional) Should WebSockets be enabled?
+
+* `acr_use_managed_identity_credentials` - (Optional) Are Managed Identity Credentials used for Azure Container Registry pull
+
+* `acr_user_managed_identity_client_id` - (Optional) If using User Managed Identity, the User Managed Identity Client Id
+
+~> **NOTE:** When using User Managed Identity with Azure Container Registry the Identity will need to have the [ACRPull role assigned](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-authentication-managed-identity#example-1-access-with-a-user-assigned-identity) 
 
 ---
 
