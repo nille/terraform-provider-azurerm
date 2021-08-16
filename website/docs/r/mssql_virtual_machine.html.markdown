@@ -137,7 +137,7 @@ The `storage_settings` block supports the following:
 
 * `default_file_path` - (Required) The SQL Server default path
 
-* `luns` - (Required) A list of Logical Unit Numbers for the disks. 
+* `luns` - (Required) A list of Logical Unit Numbers for the disks.
 
 ## Attributes Reference
 

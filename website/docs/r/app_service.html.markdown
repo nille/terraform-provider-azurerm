@@ -165,7 +165,7 @@ An `azure_blob_storage` block supports the following:
 
 * `level` - (Required) The level at which to log. Possible values include `Error`, `Warning`, `Information`, `Verbose` and `Off`. **NOTE:** this field is not available for `http_logs`
 
-* `sas_url` - (Required) The URL to the storage container with a shared access signature token appended. 
+* `sas_url` - (Required) The URL to the storage container with a shared access signature token appended.
 
 * `retention_in_days` - (Required) The number of days to retain logs for.
 
@@ -251,7 +251,7 @@ A `site_config` block supports the following:
 
 * `acr_user_managed_identity_client_id` - (Optional) If using User Managed Identity, the User Managed Identity Client Id
 
-~> **NOTE:** When using User Managed Identity with Azure Container Registry the Identity will need to have the [ACRPull role assigned](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-authentication-managed-identity#example-1-access-with-a-user-assigned-identity) 
+~> **NOTE:** When using User Managed Identity with Azure Container Registry the Identity will need to have the [ACRPull role assigned](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-authentication-managed-identity#example-1-access-with-a-user-assigned-identity)
 
 ---
 
@@ -419,13 +419,13 @@ A `source_control` block supports the following:
 
 * `repo_url` - (Required) The URL of the source code repository.
 
-* `branch` - (Optional) The branch of the remote repository to use. Defaults to 'master'. 
+* `branch` - (Optional) The branch of the remote repository to use. Defaults to 'master'.
 
-* `manual_integration` - (Optional) Limits to manual integration. Defaults to `false` if not specified. 
+* `manual_integration` - (Optional) Limits to manual integration. Defaults to `false` if not specified.
 
 * `rollback_enabled` - (Optional) Enable roll-back for the repository. Defaults to `false` if not specified.
 
-* `use_mercurial` - (Optional) Use Mercurial if `true`, otherwise uses Git. 
+* `use_mercurial` - (Optional) Use Mercurial if `true`, otherwise uses Git.
 
 ## Attributes Reference
 

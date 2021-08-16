@@ -86,7 +86,7 @@ In addition, one of either `identity` or `service_principal` blocks must be spec
 
 * `addon_profile` - (Optional) A `addon_profile` block as defined below.
 
-* `api_server_authorized_ip_ranges` - (Optional) The IP ranges to whitelist for incoming traffic to the masters.
+* `api_server_authorized_ip_ranges` - (Optional) The IP ranges to allow for incoming traffic to the server nodes.
 
 * `auto_scaler_profile` - (Optional) A `auto_scaler_profile` block as defined below.
 
@@ -688,9 +688,9 @@ A `load_balancer_profile` block exports the following:
 
 The `identity` block exports the following:
 
-* `principal_id` - The principal id of the system assigned identity which is used by master components.
+* `principal_id` - The principal id of the system assigned identity which is used by main components.
 
-* `tenant_id` - The tenant id of the system assigned identity which is used by master components.
+* `tenant_id` - The tenant id of the system assigned identity which is used by main components.
 
 ---
 

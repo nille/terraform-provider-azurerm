@@ -13,7 +13,7 @@ The Azure Provider can be used to configure infrastructure in [Microsoft Azure](
 To learn the basics of Terraform using this provider, follow the
 hands-on [get started tutorials](https://learn.hashicorp.com/tutorials/terraform/infrastructure-as-code?in=terraform/azure-get-started) on HashiCorp's Learn platform.
 
-Interested in the provider's latest features, or want to make sure you're up to date? Check out the [changelog](https://github.com/terraform-providers/terraform-provider-azurerm/blob/master/CHANGELOG.md) for version information and release notes.
+Interested in the provider's latest features, or want to make sure you're up to date? Check out the [changelog](https://github.com/hashicorp/terraform-provider-azurerm/blob/main/CHANGELOG.md) for version information and release notes.
 
 ## Authenticating to Azure
 
@@ -64,7 +64,7 @@ resource "azurerm_virtual_network" "example" {
 
 ## Features and Bug Requests
 
-The Azure provider's bugs and feature requests can be found in the [GitHub repo issues](https://github.com/terraform-providers/terraform-provider-azurerm/issues).
+The Azure provider's bugs and feature requests can be found in the [GitHub repo issues](https://github.com/hashicorp/terraform-provider-azurerm/issues).
 Please avoid "me too" or "+1" comments. Instead, use a thumbs up [reaction](https://blog.github.com/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/)
 on enhancement requests. Provider maintainers will often prioritize work based on the number of thumbs on an issue.
 
@@ -74,9 +74,9 @@ experience for you using the Azure provider.
 
 If you have a bug or feature request without an existing issue
 
-* if an existing resource or field is working in an unexpected way, [file a bug](https://github.com/terraform-providers/terraform-provider-azurerm/issues/new?template=bug.md).
+* if an existing resource or field is working in an unexpected way, [file a bug](https://github.com/hashicorp/terraform-provider-azurerm/issues/new?template=bug.md).
 
-* if you'd like the provider to support a new resource or field, [file an enhancement/feature request](https://github.com/terraform-providers/terraform-provider-azurerm/issues/new?template=enhancement.md).
+* if you'd like the provider to support a new resource or field, [file an enhancement/feature request](https://github.com/hashicorp/terraform-provider-azurerm/issues/new?template=enhancement.md).
 
 The provider maintainers will often use the assignee field on an issue to mark
 who is working on it.
@@ -175,6 +175,8 @@ The `features` block supports the following:
 
 * `log_analytics_workspace` - (Optional) A `log_analytics_workspace` block as defined below.
 
+* `resource_group` - (Optional) A `resource_group` block as defined below.
+
 * `template_deployment` - (Optional) A `template_deployment` block as defined below.
 
 * `virtual_machine` - (Optional) A `virtual_machine` block as defined below.
@@ -204,6 +206,14 @@ The `key_vault` block supports the following:
 The `log_analytics_workspace` block supports the following:
 
 * `permanently_delete_on_destroy` - (Optional) Should the `azurerm_log_analytics_workspace` be permanently deleted (e.g. purged) when destroyed? Defaults to `false`.
+
+---
+
+The `resource_group` block supports the following:
+
+* `prevent_deletion_if_contains_resources` - (Optional) Should the `azurerm_resource_group` resource check that there are no Resources within the Resource Group during deletion? This means that all Resources within the Resource Group must be deleted prior to deleting the Resource Group. Defaults to `false`.
+
+-> **Note:** This will be defaulted to `true` in the next major version of the Azure Provider (3.0).
 
 ---
 

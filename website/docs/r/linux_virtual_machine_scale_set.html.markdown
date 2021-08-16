@@ -96,11 +96,7 @@ The following arguments are supported:
 
 * `instances` - (Required) The number of Virtual Machines in the Scale Set.
 
-<<<<<<< HEAD
 -> **NOTE:** If you're using AutoScaling, you may wish to use [`Ignore Changes` functionality](https://www.pulumi.com/docs/intro/concepts/programming-model/#ignorechanges) to ignore changes to this field.
-=======
--> **Note:** If you're using AutoScaling, you may wish to use [Terraform's `ignore_changes` functionality](https://www.terraform.io/docs/configuration/resources.html#ignore_changes) to ignore changes to this field.
->>>>>>> v2.53.0
 
 * `sku` - (Required) The Virtual Machine SKU for the Scale Set, such as `Standard_F2`.
 
