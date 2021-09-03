@@ -77,8 +77,6 @@ The following arguments are supported:
 
 * `redis_version` - (Optional) Redis version. Only major version needed. Valid values: `4`, `6`.
 
-~> **Note:** Redis 6 does not support `shard_count`.
-
 * `tenant_settings` - (Optional) A mapping of tenant settings to assign to the resource.
 
 * `shard_count` - (Optional) *Only available when using the Premium SKU* The number of Shards to create on the Redis Cluster.
