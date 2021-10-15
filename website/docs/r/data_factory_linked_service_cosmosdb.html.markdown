@@ -3,12 +3,12 @@ subcategory: "Data Factory"
 layout: "azurerm"
 page_title: "Azure Resource Manager: azurerm_data_factory_linked_service_cosmosdb"
 description: |-
-  Manages a Linked Service (connection) between an SFTP Server and Azure Data Factory.
+  Manages a Linked Service (connection) between a CosmosDB and Azure Data Factory using SQL API.
 ---
 
 # azurerm_data_factory_linked_service_cosmosdb
 
-Manages a Linked Service (connection) between a SFTP Server and Azure Data Factory.
+Manages a Linked Service (connection) between a CosmosDB and Azure Data Factory using SQL API.
 
 
 ## Example Usage
