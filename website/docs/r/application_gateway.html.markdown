@@ -135,6 +135,8 @@ The following arguments are supported:
 
 * `http_listener` - (Required) One or more `http_listener` blocks as defined below.
 
+* `fips_enabled` - (Optional) Is FIPS enabled on the Application Gateway?
+
 * `identity` - (Optional) An `identity` block as defined below.
 
 * `private_link_configuration` - (Optional) One or more `private_link_configuration` blocks as defined below.
@@ -160,6 +162,8 @@ The following arguments are supported:
 * `ssl_policy` - (Optional) a `ssl policy` block as defined below.
 
 * `enable_http2` - (Optional) Is HTTP2 enabled on the application gateway resource? Defaults to `false`.
+
+* `force_firewall_policy_association` - (Optional) Is the Firewall Policy associated with the Application Gateway?
 
 * `probe` - (Optional) One or more `probe` blocks as defined below.
 
@@ -195,7 +199,13 @@ A `trusted_root_certificate` block supports the following:
 
 * `name` - (Required) The Name of the Trusted Root Certificate to use.
 
-* `data` - (Required) The contents of the Trusted Root Certificate which should be used.
+* `data` - (optional) The contents of the Trusted Root Certificate which should be used. Required if `key_vault_secret_id` is not set.
+
+* `key_vault_secret_id` - (Optional) The Secret ID of (base-64 encoded unencrypted pfx) `Secret` or `Certificate` object stored in Azure KeyVault. You need to enable soft delete for the Key Vault to use this feature. Required if `data` is not set.
+
+-> **NOTE:** TLS termination with Key Vault certificates is limited to the [v2 SKUs](https://docs.microsoft.com/en-us/azure/application-gateway/key-vault-certs).
+
+-> **NOTE:** For TLS termination with Key Vault certificates to work properly existing user-assigned managed identity, which Application Gateway uses to retrieve certificates from Key Vault, should be defined via `identity` block. Additionally, access policies in the Key Vault to allow the identity to be granted *get* access to the secret should be defined.
 
 ---
 
@@ -521,7 +531,7 @@ A `waf_configuration` block supports the following:
 
 * `rule_set_type` - (Required) The Type of the Rule Set used for this Web Application Firewall. Currently, only `OWASP` is supported.
 
-* `rule_set_version` - (Required) The Version of the Rule Set used for this Web Application Firewall. Possible values are `2.2.9`, `3.0`, and `3.1`.
+* `rule_set_version` - (Required) The Version of the Rule Set used for this Web Application Firewall. Possible values are `2.2.9`, `3.0`, `3.1`,  and `3.2`.
 
 * `disabled_rule_group` - (Optional) one or more `disabled_rule_group` blocks as defined below.
 
