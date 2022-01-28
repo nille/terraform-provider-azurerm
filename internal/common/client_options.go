@@ -12,14 +12,14 @@ import (
 	"github.com/hashicorp/terraform-provider-azurerm/version"
 )
 
+type EndpointTokenFunc func(endpoint string) (autorest.Authorizer, error)
+
 type ClientOptions struct {
 	SubscriptionId   string
 	TenantID         string
 	PartnerId        string
 	TerraformVersion string
 
-	GraphAuthorizer           autorest.Authorizer
-	GraphEndpoint             string
 	KeyVaultAuthorizer        autorest.Authorizer
 	ResourceManagerAuthorizer autorest.Authorizer
 	ResourceManagerEndpoint   string
@@ -36,7 +36,11 @@ type ClientOptions struct {
 	StorageUseAzureAD           bool
 
 	// Some Dataplane APIs require a token scoped for a specific endpoint
-	TokenFunc func(endpoint string) (autorest.Authorizer, error)
+	TokenFunc EndpointTokenFunc
+
+	// TODO: remove graph configuration in v3.0
+	GraphAuthorizer autorest.Authorizer
+	GraphEndpoint   string
 }
 
 func (o ClientOptions) ConfigureClient(c *autorest.Client, authorizer autorest.Authorizer) {
