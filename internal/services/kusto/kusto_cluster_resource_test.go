@@ -15,8 +15,7 @@ import (
 	"github.com/hashicorp/terraform-provider-azurerm/utils"
 )
 
-type KustoClusterResource struct {
-}
+type KustoClusterResource struct{}
 
 func TestAccKustoCluster_basic(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azurerm_kusto_cluster", "test")
@@ -591,6 +590,7 @@ resource "azurerm_kusto_cluster" "test" {
   name                    = "acctestkc%s"
   location                = azurerm_resource_group.test.location
   resource_group_name     = azurerm_resource_group.test.name
+  enable_auto_stop        = true
   enable_disk_encryption  = true
   enable_streaming_ingest = true
   enable_purge            = true

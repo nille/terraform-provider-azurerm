@@ -38,8 +38,10 @@ import (
 	"github.com/tombuildsstuff/giovanni/storage/2019-12-12/queue/queues"
 )
 
-var storageAccountResourceName = "azurerm_storage_account"
-var allowPublicNestedItemsName = getDefaultAllowBlobPublicAccessName()
+var (
+	storageAccountResourceName = "azurerm_storage_account"
+	allowPublicNestedItemsName = getDefaultAllowBlobPublicAccessName()
+)
 
 func resourceStorageAccount() *pluginsdk.Resource {
 	upgraders := map[int]pluginsdk.StateUpgrade{
@@ -350,6 +352,7 @@ func resourceStorageAccount() *pluginsdk.Resource {
 			},
 
 			"identity": func() *schema.Schema {
+				// TODO: 3.0 - document this in the upgrade guide
 				if features.ThreePointOhBeta() {
 					return commonschema.SystemAssignedUserAssignedIdentityOptional()
 				}
