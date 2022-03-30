@@ -10,7 +10,6 @@ import (
 	"github.com/Azure/azure-sdk-for-go/services/web/mgmt/2021-02-01/web"
 	"github.com/google/uuid"
 	"github.com/hashicorp/go-azure-helpers/resourcemanager/commonschema"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/azure"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
@@ -58,13 +57,7 @@ func resourceFunctionAppSlot() *pluginsdk.Resource {
 
 			"location": azure.SchemaLocation(),
 
-			"identity": func() *schema.Schema {
-				if !features.ThreePointOhBeta() {
-					return schemaAppServiceIdentity()
-				}
-
-				return commonschema.SystemAssignedUserAssignedIdentityOptional()
-			}(),
+			"identity": commonschema.SystemAssignedUserAssignedIdentityOptional(),
 
 			"function_app_name": {
 				Type:         pluginsdk.TypeString,
@@ -139,13 +132,6 @@ func resourceFunctionAppSlot() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					"linux",
 				}, false),
-			},
-
-			"client_affinity_enabled": {
-				Type:       pluginsdk.TypeBool,
-				Optional:   true,
-				Computed:   true,
-				Deprecated: "This property is no longer configurable in the service and has been deprecated.",
 			},
 
 			"connection_string": {
@@ -539,7 +525,6 @@ func resourceFunctionAppSlotRead(d *pluginsdk.ResourceData, meta interface{}) er
 		d.Set("daily_memory_time_quota", props.DailyMemoryTimeQuota)
 		d.Set("outbound_ip_addresses", props.OutboundIPAddresses)
 		d.Set("possible_outbound_ip_addresses", props.PossibleOutboundIPAddresses)
-		d.Set("client_affinity_enabled", props.ClientAffinityEnabled)
 	}
 
 	appSettings := flattenAppServiceAppSettings(appSettingsResp.Properties)

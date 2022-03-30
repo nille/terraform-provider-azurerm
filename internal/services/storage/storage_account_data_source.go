@@ -34,14 +34,7 @@ func dataSourceStorageAccount() *pluginsdk.Resource {
 				ValidateFunc: validate.StorageAccountName,
 			},
 
-			// Overridden intentionally by Pulumi. This attribute is not actually
-			// required in the Azure API. Changing it to required will break many of
-			// our TypeScript mixins unnecessarily, so we leave it optional:
-			"resource_group_name": {
-				Type:     pluginsdk.TypeString,
-				Optional: true, // `resource_group_name: One of optional, required, or computed must be set` without this
-				Computed: true,
-			},
+			"resource_group_name": commonschema.ResourceGroupNameForDataSource(),
 
 			"location": commonschema.LocationComputed(),
 

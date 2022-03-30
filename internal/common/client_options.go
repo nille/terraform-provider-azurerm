@@ -59,6 +59,7 @@ func (o ClientOptions) ConfigureClient(c *autorest.Client, authorizer autorest.A
 }
 
 func setUserAgent(client *autorest.Client, tfVersion, partnerID string, disableTerraformPartnerID bool) {
+	// FORK: this gives us the ability to add a Pulumi Specific user agent
 	providerUserAgent := fmt.Sprintf("pulumi-azure/%s", version.ProviderVersion)
 	client.UserAgent = strings.TrimSpace(fmt.Sprintf("%s %s", client.UserAgent, providerUserAgent))
 

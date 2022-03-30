@@ -236,43 +236,7 @@ func resourceKubernetesCluster() *pluginsdk.Resource {
 				Optional: true,
 			},
 
-			"identity": func() *schema.Schema {
-				if !features.ThreePointOhBeta() {
-					return &schema.Schema{
-						Type:         pluginsdk.TypeList,
-						Optional:     true,
-						ExactlyOneOf: []string{"identity", "service_principal"},
-						MaxItems:     1,
-						Elem: &pluginsdk.Resource{
-							Schema: map[string]*pluginsdk.Schema{
-								"type": {
-									Type:     pluginsdk.TypeString,
-									Required: true,
-									ValidateFunc: validation.StringInSlice([]string{
-										string(containerservice.ResourceIdentityTypeSystemAssigned),
-										string(containerservice.ResourceIdentityTypeUserAssigned),
-									}, false),
-								},
-								"user_assigned_identity_id": {
-									Type:         pluginsdk.TypeString,
-									ValidateFunc: msivalidate.UserAssignedIdentityID,
-									Optional:     true,
-								},
-								"principal_id": {
-									Type:     pluginsdk.TypeString,
-									Computed: true,
-								},
-								"tenant_id": {
-									Type:     pluginsdk.TypeString,
-									Computed: true,
-								},
-							},
-						},
-					}
-				}
-
-				return commonschema.SystemOrUserAssignedIdentityOptional()
-			}(),
+			"identity": commonschema.SystemOrUserAssignedIdentityOptional(),
 
 			"kubelet_identity": {
 				Type:     pluginsdk.TypeList,
@@ -886,17 +850,20 @@ func resourceKubernetesCluster() *pluginsdk.Resource {
 			},
 
 			"kube_admin_config": {
-				Type:     pluginsdk.TypeList,
-				Computed: true,
+				Type:      pluginsdk.TypeList,
+				Computed:  true,
+				Sensitive: true,
 				Elem: &pluginsdk.Resource{
 					Schema: map[string]*pluginsdk.Schema{
 						"host": {
-							Type:     pluginsdk.TypeString,
-							Computed: true,
+							Type:      pluginsdk.TypeString,
+							Computed:  true,
+							Sensitive: true,
 						},
 						"username": {
-							Type:     pluginsdk.TypeString,
-							Computed: true,
+							Type:      pluginsdk.TypeString,
+							Computed:  true,
+							Sensitive: true,
 						},
 						"password": {
 							Type:      pluginsdk.TypeString,
@@ -929,17 +896,20 @@ func resourceKubernetesCluster() *pluginsdk.Resource {
 			},
 
 			"kube_config": {
-				Type:     pluginsdk.TypeList,
-				Computed: true,
+				Type:      pluginsdk.TypeList,
+				Computed:  true,
+				Sensitive: true,
 				Elem: &pluginsdk.Resource{
 					Schema: map[string]*pluginsdk.Schema{
 						"host": {
-							Type:     pluginsdk.TypeString,
-							Computed: true,
+							Type:      pluginsdk.TypeString,
+							Computed:  true,
+							Sensitive: true,
 						},
 						"username": {
-							Type:     pluginsdk.TypeString,
-							Computed: true,
+							Type:      pluginsdk.TypeString,
+							Computed:  true,
+							Sensitive: true,
 						},
 						"password": {
 							Type:      pluginsdk.TypeString,
@@ -1011,82 +981,114 @@ func resourceKubernetesCluster() *pluginsdk.Resource {
 		resource.Schema[k] = v
 	}
 
-	if features.KubeConfigsAreSensitive() {
-		resource.Schema["kube_config"] = &pluginsdk.Schema{
-			Type:      pluginsdk.TypeList,
-			Computed:  true,
-			Sensitive: true,
-			Elem: &pluginsdk.Resource{
-				Schema: map[string]*pluginsdk.Schema{
-					"host": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
-					},
-					"username": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
-					},
-					"password": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
-					},
-					"client_certificate": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
-					},
-					"client_key": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
-					},
-					"cluster_ca_certificate": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
-					},
-				},
-			},
+	if !features.ThreePointOhBeta() {
+		resource.Schema["private_link_enabled"] = &pluginsdk.Schema{
+			Type:          pluginsdk.TypeBool,
+			Optional:      true,
+			ForceNew:      true,
+			Computed:      true,
+			ConflictsWith: []string{"private_cluster_enabled"},
+			Deprecated:    "`private_link_enabled` is deprecated in favour of `private_cluster_enabled` and will be removed in version 3.0 of the AzureRM Provider",
 		}
 
-		resource.Schema["kube_admin_config"] = &pluginsdk.Schema{
-			Type:      pluginsdk.TypeList,
-			Computed:  true,
-			Sensitive: true,
+		resource.Schema["role_based_access_control"] = &pluginsdk.Schema{
+			Type:          pluginsdk.TypeList,
+			Optional:      true,
+			Computed:      true,
+			MaxItems:      1,
+			ConflictsWith: []string{"role_based_access_control_enabled", "azure_active_directory_role_based_access_control"},
+			Deprecated:    "`role_based_access_control` is deprecated in favour of the properties `role_based_access_control_enabled` and `azure_active_directory_role_based_access_control` and will be removed in version 3.0 of the AzureRM provider",
 			Elem: &pluginsdk.Resource{
 				Schema: map[string]*pluginsdk.Schema{
-					"host": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
+					"enabled": {
+						Type:     pluginsdk.TypeBool,
+						Required: true,
+						ForceNew: true,
 					},
-					"username": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
-					},
-					"password": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
-					},
-					"client_certificate": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
-					},
-					"client_key": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
-					},
-					"cluster_ca_certificate": {
-						Type:      pluginsdk.TypeString,
-						Computed:  true,
-						Sensitive: true,
+					"azure_active_directory": {
+						Type:     pluginsdk.TypeList,
+						Optional: true,
+						MaxItems: 1,
+						Elem: &pluginsdk.Resource{
+							Schema: map[string]*pluginsdk.Schema{
+								"client_app_id": {
+									Type:         pluginsdk.TypeString,
+									Optional:     true,
+									ValidateFunc: validation.IsUUID,
+									AtLeastOneOf: []string{
+										"role_based_access_control.0.azure_active_directory.0.client_app_id", "role_based_access_control.0.azure_active_directory.0.server_app_id",
+										"role_based_access_control.0.azure_active_directory.0.server_app_secret", "role_based_access_control.0.azure_active_directory.0.tenant_id",
+										"role_based_access_control.0.azure_active_directory.0.managed", "role_based_access_control.0.azure_active_directory.0.admin_group_object_ids",
+									},
+								},
+
+								"server_app_id": {
+									Type:         pluginsdk.TypeString,
+									Optional:     true,
+									ValidateFunc: validation.IsUUID,
+									AtLeastOneOf: []string{
+										"role_based_access_control.0.azure_active_directory.0.client_app_id", "role_based_access_control.0.azure_active_directory.0.server_app_id",
+										"role_based_access_control.0.azure_active_directory.0.server_app_secret", "role_based_access_control.0.azure_active_directory.0.tenant_id",
+										"role_based_access_control.0.azure_active_directory.0.managed", "role_based_access_control.0.azure_active_directory.0.admin_group_object_ids",
+									},
+								},
+
+								"server_app_secret": {
+									Type:         pluginsdk.TypeString,
+									Optional:     true,
+									Sensitive:    true,
+									ValidateFunc: validation.StringIsNotEmpty,
+									AtLeastOneOf: []string{
+										"role_based_access_control.0.azure_active_directory.0.client_app_id", "role_based_access_control.0.azure_active_directory.0.server_app_id",
+										"role_based_access_control.0.azure_active_directory.0.server_app_secret", "role_based_access_control.0.azure_active_directory.0.tenant_id",
+										"role_based_access_control.0.azure_active_directory.0.managed", "role_based_access_control.0.azure_active_directory.0.admin_group_object_ids",
+									},
+								},
+
+								"tenant_id": {
+									Type:     pluginsdk.TypeString,
+									Optional: true,
+									Computed: true,
+									// OrEmpty since this can be sourced from the client config if it's not specified
+									ValidateFunc: validation.Any(validation.IsUUID, validation.StringIsEmpty),
+									AtLeastOneOf: []string{
+										"role_based_access_control.0.azure_active_directory.0.client_app_id", "role_based_access_control.0.azure_active_directory.0.server_app_id",
+										"role_based_access_control.0.azure_active_directory.0.server_app_secret", "role_based_access_control.0.azure_active_directory.0.tenant_id",
+										"role_based_access_control.0.azure_active_directory.0.managed", "role_based_access_control.0.azure_active_directory.0.admin_group_object_ids",
+									},
+								},
+
+								"managed": {
+									Type:     pluginsdk.TypeBool,
+									Optional: true,
+									AtLeastOneOf: []string{
+										"role_based_access_control.0.azure_active_directory.0.client_app_id", "role_based_access_control.0.azure_active_directory.0.server_app_id",
+										"role_based_access_control.0.azure_active_directory.0.server_app_secret", "role_based_access_control.0.azure_active_directory.0.tenant_id",
+										"role_based_access_control.0.azure_active_directory.0.managed", "role_based_access_control.0.azure_active_directory.0.admin_group_object_ids",
+									},
+								},
+
+								"azure_rbac_enabled": {
+									Type:     pluginsdk.TypeBool,
+									Optional: true,
+								},
+
+								"admin_group_object_ids": {
+									Type:       pluginsdk.TypeSet,
+									Optional:   true,
+									ConfigMode: pluginsdk.SchemaConfigModeAttr,
+									Elem: &pluginsdk.Schema{
+										Type:         pluginsdk.TypeString,
+										ValidateFunc: validation.IsUUID,
+									},
+									AtLeastOneOf: []string{
+										"role_based_access_control.0.azure_active_directory.0.client_app_id", "role_based_access_control.0.azure_active_directory.0.server_app_id",
+										"role_based_access_control.0.azure_active_directory.0.server_app_secret", "role_based_access_control.0.azure_active_directory.0.tenant_id",
+										"role_based_access_control.0.azure_active_directory.0.managed", "role_based_access_control.0.azure_active_directory.0.admin_group_object_ids",
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -1992,7 +1994,6 @@ func resourceKubernetesClusterRead(d *pluginsdk.ResourceData, meta interface{}) 
 		}
 		d.Set("automatic_channel_upgrade", upgradeChannel)
 
-		// TODO: 2.0 we should introduce a access_profile block to match the new API design,
 		if accessProfile := props.APIServerAccessProfile; accessProfile != nil {
 			apiServerAuthorizedIPRanges := utils.FlattenStringSlice(accessProfile.AuthorizedIPRanges)
 			if err := d.Set("api_server_authorized_ip_ranges", apiServerAuthorizedIPRanges); err != nil {
@@ -2749,31 +2750,6 @@ func expandKubernetesClusterAzureActiveDirectoryRoleBasedAccessControl(input []i
 }
 
 func expandKubernetesClusterManagedClusterIdentity(input []interface{}) (*containerservice.ManagedClusterIdentity, error) {
-	if !features.ThreePointOhBeta() {
-		if len(input) == 0 || input[0] == nil {
-			return &containerservice.ManagedClusterIdentity{
-				Type: containerservice.ResourceIdentityTypeNone,
-			}, nil
-		}
-
-		values := input[0].(map[string]interface{})
-
-		if containerservice.ResourceIdentityType(values["type"].(string)) == containerservice.ResourceIdentityTypeUserAssigned {
-			userAssignedIdentities := map[string]*containerservice.ManagedClusterIdentityUserAssignedIdentitiesValue{
-				values["user_assigned_identity_id"].(string): {},
-			}
-
-			return &containerservice.ManagedClusterIdentity{
-				Type:                   containerservice.ResourceIdentityType(values["type"].(string)),
-				UserAssignedIdentities: userAssignedIdentities,
-			}, nil
-		}
-
-		return &containerservice.ManagedClusterIdentity{
-			Type: containerservice.ResourceIdentityType(values["type"].(string)),
-		}, nil
-	}
-
 	expanded, err := identity.ExpandSystemOrUserAssignedMap(input)
 	if err != nil {
 		return nil, err
@@ -2997,44 +2973,6 @@ func flattenKubernetesClusterKubeConfigAAD(config kubernetes.KubeConfigAAD) []in
 }
 
 func flattenClusterIdentity(input *containerservice.ManagedClusterIdentity) (*[]interface{}, error) {
-	if !features.ThreePointOhBeta() {
-		// if it's none, omit the block
-		if input == nil || input.Type == containerservice.ResourceIdentityTypeNone {
-			return &[]interface{}{}, nil
-		}
-
-		identity := make(map[string]interface{})
-
-		identity["principal_id"] = ""
-		if input.PrincipalID != nil {
-			identity["principal_id"] = *input.PrincipalID
-		}
-
-		identity["tenant_id"] = ""
-		if input.TenantID != nil {
-			identity["tenant_id"] = *input.TenantID
-		}
-
-		identity["user_assigned_identity_id"] = ""
-		if input.UserAssignedIdentities != nil {
-			keys := []string{}
-			for key := range input.UserAssignedIdentities {
-				keys = append(keys, key)
-			}
-			if len(keys) > 0 {
-				parsedId, err := msiparse.UserAssignedIdentityIDInsensitively(keys[0])
-				if err != nil {
-					return nil, err
-				}
-				identity["user_assigned_identity_id"] = parsedId.ID()
-			}
-		}
-
-		identity["type"] = string(input.Type)
-
-		return &[]interface{}{identity}, nil
-	}
-
 	var transform *identity.SystemOrUserAssignedMap
 
 	if input != nil {
