@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/Azure/azure-sdk-for-go/services/preview/servicebus/mgmt/2021-06-01-preview/servicebus"
-	"github.com/hashicorp/go-azure-helpers/resourcemanager/resourcegroups"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
@@ -43,6 +42,8 @@ func resourceServiceBusTopic() *pluginsdk.Resource {
 	}
 }
 
+// FORK: @stack72: Ensured the ResourceGroupName and NamespaceName was available as a computed attribute for use
+// in the servicebus mixins in Pulumi
 func resourceServiceBusTopicSchema() map[string]*pluginsdk.Schema {
 	out := map[string]*pluginsdk.Schema{
 		"name": {
@@ -143,27 +144,16 @@ func resourceServiceBusTopicSchema() map[string]*pluginsdk.Schema {
 			Type:     pluginsdk.TypeBool,
 			Optional: true,
 		},
-	}
-	if !features.ThreePointOhBeta() {
-		out["namespace_name"] = &pluginsdk.Schema{
-			Type:          pluginsdk.TypeString,
-			Optional:      true,
-			Computed:      true,
-			ForceNew:      true,
-			ValidateFunc:  azValidate.NamespaceName,
-			Deprecated:    `Deprecated in favor of "namespace_id"`,
-			ConflictsWith: []string{"namespace_id"},
-		}
 
-		out["resource_group_name"] = &pluginsdk.Schema{
-			Type:          pluginsdk.TypeString,
-			Optional:      true,
-			Computed:      true,
-			ForceNew:      true,
-			ValidateFunc:  resourcegroups.ValidateName,
-			Deprecated:    `Deprecated in favor of "namespace_id"`,
-			ConflictsWith: []string{"namespace_id"},
-		}
+		"resource_group_name": {
+			Type:     pluginsdk.TypeString,
+			Computed: true,
+		},
+
+		"namespace_name": {
+			Type:     pluginsdk.TypeString,
+			Computed: true,
+		},
 	}
 
 	return out
@@ -275,11 +265,8 @@ func resourceServiceBusTopicRead(d *pluginsdk.ResourceData, meta interface{}) er
 	}
 
 	d.Set("name", id.Name)
-	if !features.ThreePointOhBeta() {
-		d.Set("namespace_name", id.NamespaceName)
-		d.Set("resource_group_name", id.ResourceGroup)
-	}
-
+	d.Set("namespace_name", id.NamespaceName)
+	d.Set("resource_group_name", id.ResourceGroup)
 	d.Set("namespace_id", parse.NewNamespaceID(id.SubscriptionId, id.ResourceGroup, id.NamespaceName).ID())
 
 	if props := resp.SBTopicProperties; props != nil {

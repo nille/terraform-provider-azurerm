@@ -41,6 +41,8 @@ func resourceServiceBusQueue() *pluginsdk.Resource {
 	}
 }
 
+// FORK: @stack72: Ensured the ResourceGroupName and NamespaceName was available as a computed attribute for use
+// in the servicebus mixins in Pulumi
 func resourceServicebusQueueSchema() map[string]*pluginsdk.Schema {
 	s := map[string]*pluginsdk.Schema{
 		"name": {
@@ -170,7 +172,12 @@ func resourceServicebusQueueSchema() map[string]*pluginsdk.Schema {
 		},
 
 		"resource_group_name": {
-			Type:     pluginsdk.TypeBool,
+			Type:     pluginsdk.TypeString,
+			Computed: true,
+		},
+
+		"namespace_name": {
+			Type:     pluginsdk.TypeString,
 			Computed: true,
 		},
 
@@ -191,17 +198,6 @@ func resourceServicebusQueueSchema() map[string]*pluginsdk.Schema {
 		},
 	}
 
-	if !features.ThreePointOhBeta() {
-		s["namespace_name"] = &pluginsdk.Schema{
-			Type:          pluginsdk.TypeString,
-			Optional:      true,
-			Computed:      true,
-			ForceNew:      true,
-			ValidateFunc:  azValidate.NamespaceName,
-			Deprecated:    `Deprecated in favor of "namespace_id"`,
-			ConflictsWith: []string{"namespace_id"},
-		}
-	}
 	return s
 }
 
@@ -332,11 +328,9 @@ func resourceServiceBusQueueRead(d *pluginsdk.ResourceData, meta interface{}) er
 	}
 
 	d.Set("name", id.Name)
-	if !features.ThreePointOhBeta() {
-		d.Set("namespace_name", id.NamespaceName)
-	}
 	d.Set("namespace_id", parse.NewNamespaceID(id.SubscriptionId, id.ResourceGroup, id.NamespaceName).ID())
 	d.Set("resource_group_name", id.ResourceGroup)
+	d.Set("namespace_name", id.NamespaceName)
 
 	if props := resp.SBQueueProperties; props != nil {
 		d.Set("auto_delete_on_idle", props.AutoDeleteOnIdle)
