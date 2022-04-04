@@ -34,7 +34,8 @@ func dataSourceStorageAccount() *pluginsdk.Resource {
 				ValidateFunc: validate.StorageAccountName,
 			},
 
-			"resource_group_name": commonschema.ResourceGroupNameForDataSource(),
+			// Fork: Ensuring that ResourceGroupName is optional when getting a storage account
+			"resource_group_name": commonschema.ResourceGroupNameOptional(),
 
 			"location": commonschema.LocationComputed(),
 
