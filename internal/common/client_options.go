@@ -72,7 +72,7 @@ func setUserAgent(client *autorest.Client, tfVersion, partnerID string, disableT
 	// hence, send partner ID if present, otherwise send Pulumi GUID
 	// unless users have opted out
 	if partnerID == "" && !disableTerraformPartnerID {
-		// Microsoft’s Pulumi Partner ID is this specific GUID
+		// FORK: Microsoft’s Pulumi Partner ID is this specific GUID
 		partnerID = "a90539d8-a7a6-5826-95c4-1fbef22d4b22"
 	}
 

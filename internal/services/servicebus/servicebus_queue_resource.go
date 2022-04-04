@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/Azure/azure-sdk-for-go/services/preview/servicebus/mgmt/2021-06-01-preview/servicebus"
-	"github.com/hashicorp/go-azure-helpers/resourcemanager/resourcegroups"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
@@ -170,6 +169,11 @@ func resourceServicebusQueueSchema() map[string]*pluginsdk.Schema {
 			ForceNew: true,
 		},
 
+		"resource_group_name": {
+			Type:     pluginsdk.TypeBool,
+			Computed: true,
+		},
+
 		"status": {
 			Type:     pluginsdk.TypeString,
 			Optional: true,
@@ -194,16 +198,6 @@ func resourceServicebusQueueSchema() map[string]*pluginsdk.Schema {
 			Computed:      true,
 			ForceNew:      true,
 			ValidateFunc:  azValidate.NamespaceName,
-			Deprecated:    `Deprecated in favor of "namespace_id"`,
-			ConflictsWith: []string{"namespace_id"},
-		}
-
-		s["resource_group_name"] = &pluginsdk.Schema{
-			Type:          pluginsdk.TypeString,
-			Optional:      true,
-			Computed:      true,
-			ForceNew:      true,
-			ValidateFunc:  resourcegroups.ValidateName,
 			Deprecated:    `Deprecated in favor of "namespace_id"`,
 			ConflictsWith: []string{"namespace_id"},
 		}
@@ -340,9 +334,9 @@ func resourceServiceBusQueueRead(d *pluginsdk.ResourceData, meta interface{}) er
 	d.Set("name", id.Name)
 	if !features.ThreePointOhBeta() {
 		d.Set("namespace_name", id.NamespaceName)
-		d.Set("resource_group_name", id.ResourceGroup)
 	}
 	d.Set("namespace_id", parse.NewNamespaceID(id.SubscriptionId, id.ResourceGroup, id.NamespaceName).ID())
+	d.Set("resource_group_name", id.ResourceGroup)
 
 	if props := resp.SBQueueProperties; props != nil {
 		d.Set("auto_delete_on_idle", props.AutoDeleteOnIdle)
