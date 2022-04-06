@@ -109,7 +109,7 @@ func resourceStorageAccount() *pluginsdk.Resource {
 					string(storage.KindBlockBlobStorage),
 					string(storage.KindFileStorage),
 					string(storage.KindStorageV2),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 				Default:          string(storage.KindStorageV2),
 			},
@@ -121,7 +121,7 @@ func resourceStorageAccount() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					"Standard",
 					"Premium",
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 
@@ -135,7 +135,7 @@ func resourceStorageAccount() *pluginsdk.Resource {
 					"RAGRS",
 					"GZRS",
 					"RAGZRS",
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 
@@ -147,7 +147,7 @@ func resourceStorageAccount() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					string(storage.AccessTierCool),
 					string(storage.AccessTierHot),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 
@@ -330,7 +330,7 @@ func resourceStorageAccount() *pluginsdk.Resource {
 									string(storage.BypassLogging),
 									string(storage.BypassMetrics),
 									string(storage.BypassNone),
-								}, !features.ThreePointOhBeta()),
+								}, features.CaseInsensitive()),
 								DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 							},
 							Set: pluginsdk.HashString,

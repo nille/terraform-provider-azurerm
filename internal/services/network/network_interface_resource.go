@@ -96,7 +96,7 @@ func resourceNetworkInterface() *pluginsdk.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								string(network.IPAllocationMethodDynamic),
 								string(network.IPAllocationMethodStatic),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 

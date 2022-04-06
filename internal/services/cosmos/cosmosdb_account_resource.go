@@ -118,7 +118,7 @@ func resourceCosmosDbAccount() *pluginsdk.Resource {
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 				ValidateFunc: validation.StringInSlice([]string{
 					string(documentdb.DatabaseAccountOfferTypeStandard),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 			},
 
 			"analytical_storage": {
@@ -190,7 +190,7 @@ func resourceCosmosDbAccount() *pluginsdk.Resource {
 					string(documentdb.DatabaseAccountKindGlobalDocumentDB),
 					string(documentdb.DatabaseAccountKindMongoDB),
 					string(documentdb.DatabaseAccountKindParse),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 			},
 
 			"ip_range_filter": {
@@ -254,7 +254,7 @@ func resourceCosmosDbAccount() *pluginsdk.Resource {
 								string(documentdb.DefaultConsistencyLevelEventual),
 								string(documentdb.DefaultConsistencyLevelSession),
 								string(documentdb.DefaultConsistencyLevelStrong),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 
 						"max_interval_in_seconds": {

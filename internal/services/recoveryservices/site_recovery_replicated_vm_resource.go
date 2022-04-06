@@ -167,7 +167,7 @@ func resourceSiteRecoveryReplicatedVM() *pluginsdk.Resource {
 								string(compute.DiskStorageAccountTypesPremiumLRS),
 								string(compute.DiskStorageAccountTypesStandardSSDLRS),
 								string(compute.DiskStorageAccountTypesUltraSSDLRS),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 						"target_replica_disk_type": {
@@ -179,7 +179,7 @@ func resourceSiteRecoveryReplicatedVM() *pluginsdk.Resource {
 								string(compute.DiskStorageAccountTypesPremiumLRS),
 								string(compute.DiskStorageAccountTypesStandardSSDLRS),
 								string(compute.DiskStorageAccountTypesUltraSSDLRS),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 						"target_disk_encryption_set_id": {

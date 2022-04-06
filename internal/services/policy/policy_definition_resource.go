@@ -296,7 +296,7 @@ func resourceArmPolicyDefinitionSchema() map[string]*pluginsdk.Schema {
 				string(policy.TypeCustom),
 				string(policy.TypeNotSpecified),
 				string(policy.TypeStatic),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 		},
 
 		"mode": {

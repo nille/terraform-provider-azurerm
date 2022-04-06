@@ -338,7 +338,7 @@ func resourceIotHub() *pluginsdk.Resource {
 									string(devices.EncodingAvro),
 									string(devices.EncodingAvroDeflate),
 									string(devices.EncodingJSON),
-								}, !features.ThreePointOhBeta()),
+								}, features.CaseInsensitive()),
 							},
 
 							"file_name_format": {

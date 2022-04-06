@@ -81,7 +81,7 @@ func resourceNetworkSecurityGroup() *pluginsdk.Resource {
 								string(network.SecurityRuleProtocolIcmp),
 								string(network.SecurityRuleProtocolAh),
 								string(network.SecurityRuleProtocolEsp),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 
@@ -153,7 +153,7 @@ func resourceNetworkSecurityGroup() *pluginsdk.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								string(network.SecurityRuleAccessAllow),
 								string(network.SecurityRuleAccessDeny),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 
@@ -169,7 +169,7 @@ func resourceNetworkSecurityGroup() *pluginsdk.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								string(network.SecurityRuleDirectionInbound),
 								string(network.SecurityRuleDirectionOutbound),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 					},

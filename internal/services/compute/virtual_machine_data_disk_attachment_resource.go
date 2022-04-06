@@ -67,7 +67,7 @@ func resourceVirtualMachineDataDiskAttachment() *pluginsdk.Resource {
 					string(compute.CachingTypesNone),
 					string(compute.CachingTypesReadOnly),
 					string(compute.CachingTypesReadWrite),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 
@@ -79,7 +79,7 @@ func resourceVirtualMachineDataDiskAttachment() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					string(compute.DiskCreateOptionTypesAttach),
 					string(compute.DiskCreateOptionTypesEmpty),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 

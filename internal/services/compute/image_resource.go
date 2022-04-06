@@ -86,7 +86,7 @@ func resourceImage() *pluginsdk.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								string(compute.OperatingSystemTypesLinux),
 								string(compute.OperatingSystemTypesWindows),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 
 						"os_state": {
@@ -96,7 +96,7 @@ func resourceImage() *pluginsdk.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								string(compute.OperatingSystemStateTypesGeneralized),
 								string(compute.OperatingSystemStateTypesSpecialized),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 
 						"managed_disk_id": {
@@ -124,7 +124,7 @@ func resourceImage() *pluginsdk.Resource {
 								string(compute.CachingTypesNone),
 								string(compute.CachingTypesReadOnly),
 								string(compute.CachingTypesReadWrite),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 
 						"size_gb": {
@@ -169,7 +169,7 @@ func resourceImage() *pluginsdk.Resource {
 								string(compute.CachingTypesNone),
 								string(compute.CachingTypesReadOnly),
 								string(compute.CachingTypesReadWrite),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 

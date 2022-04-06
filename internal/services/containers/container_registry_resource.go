@@ -919,7 +919,7 @@ func resourceContainerRegistrySchema() map[string]*pluginsdk.Schema {
 				string(containerregistry.SkuNameBasic),
 				string(containerregistry.SkuNameStandard),
 				string(containerregistry.SkuNamePremium),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 		},
 
 		"admin_enabled": {

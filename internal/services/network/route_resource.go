@@ -70,7 +70,7 @@ func resourceRoute() *pluginsdk.Resource {
 					string(network.RouteNextHopTypeInternet),
 					string(network.RouteNextHopTypeVirtualAppliance),
 					string(network.RouteNextHopTypeNone),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 

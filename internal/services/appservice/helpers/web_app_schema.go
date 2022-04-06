@@ -2403,7 +2403,7 @@ func ConnectionStringSchema() *pluginsdk.Schema {
 						string(web.ConnectionStringTypeServiceBus),
 						string(web.ConnectionStringTypeSQLAzure),
 						string(web.ConnectionStringTypeSQLServer),
-					}, !features.ThreePointOhBeta()),
+					}, features.CaseInsensitive()),
 					DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 					Description:      "Type of database. Possible values include: `MySQL`, `SQLServer`, `SQLAzure`, `Custom`, `NotificationHub`, `ServiceBus`, `EventHub`, `APIHub`, `DocDb`, `RedisCache`, and `PostgreSQL`.",
 				},

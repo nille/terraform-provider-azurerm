@@ -127,7 +127,7 @@ func resourcePostgreSQLServer() *pluginsdk.Resource {
 					string(postgresql.OneOne),
 					string(postgresql.OneZero),
 					string(postgresql.OneZeroFullStopZero),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 

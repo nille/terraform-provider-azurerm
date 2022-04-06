@@ -82,7 +82,7 @@ func resourceNotificationHubNamespace() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					string(notificationhubs.NamespaceTypeMessaging),
 					string(notificationhubs.NamespaceTypeNotificationHub),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 

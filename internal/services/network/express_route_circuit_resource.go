@@ -76,7 +76,7 @@ func resourceExpressRouteCircuit() *pluginsdk.Resource {
 								string(network.ExpressRouteCircuitSkuTierLocal),
 								string(network.ExpressRouteCircuitSkuTierStandard),
 								string(network.ExpressRouteCircuitSkuTierPremium),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 
@@ -86,7 +86,7 @@ func resourceExpressRouteCircuit() *pluginsdk.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								string(network.ExpressRouteCircuitSkuFamilyMeteredData),
 								string(network.ExpressRouteCircuitSkuFamilyUnlimitedData),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 					},

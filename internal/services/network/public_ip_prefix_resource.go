@@ -81,7 +81,7 @@ func resourcePublicIpPrefix() *pluginsdk.Resource {
 					ValidateFunc: validation.StringInSlice([]string{
 						string(network.IPVersionIPv4),
 						string(network.IPVersionIPv6),
-					}, !features.ThreePointOhBeta()),
+					}, features.CaseInsensitive()),
 				},
 
 				"ip_prefix": {

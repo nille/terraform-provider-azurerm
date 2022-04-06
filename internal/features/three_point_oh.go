@@ -22,3 +22,9 @@ func ThreePointOh() bool {
 func ThreePointOhBeta() bool {
 	return true
 }
+
+// FORK: Small function to help us not make a breaking change in the Pulumi
+// provider where all Enums have been changed to case sensitive
+func CaseInsensitive() bool {
+	return true
+}

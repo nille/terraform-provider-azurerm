@@ -82,7 +82,7 @@ func resourceTemplateDeployment() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					string(resources.DeploymentModeComplete),
 					string(resources.DeploymentModeIncremental),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 

@@ -490,7 +490,7 @@ func resourceKubernetesCluster() *pluginsdk.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								string(containerservice.LoadBalancerSkuBasic),
 								string(containerservice.LoadBalancerSkuStandard),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 
 						"outbound_type": {

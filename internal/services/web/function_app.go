@@ -163,7 +163,7 @@ func schemaAppServiceFunctionAppSiteConfig() *pluginsdk.Schema {
 						"v4.0",
 						"v5.0",
 						"v6.0",
-					}, !features.ThreePointOhBeta()),
+					}, features.CaseInsensitive()),
 					DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 				},
 

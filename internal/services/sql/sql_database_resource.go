@@ -474,7 +474,7 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 				string(sql.CreateModeRecovery),
 				string(sql.CreateModeRestore),
 				string(sql.CreateModeRestoreLongTermRetentionBackup),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 		},
 
 		"import": {
@@ -499,7 +499,7 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 						ValidateFunc: validation.StringInSlice([]string{
 							"StorageAccessKey",
 							"SharedAccessKey",
-						}, !features.ThreePointOhBeta()),
+						}, features.CaseInsensitive()),
 					},
 					"administrator_login": {
 						Type:     pluginsdk.TypeString,
@@ -517,7 +517,7 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 						ValidateFunc: validation.StringInSlice([]string{
 							"ADPassword",
 							"SQL",
-						}, !features.ThreePointOhBeta()),
+						}, features.CaseInsensitive()),
 					},
 					"operation_mode": {
 						Type:             pluginsdk.TypeString,
@@ -526,7 +526,7 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 						DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						ValidateFunc: validation.StringInSlice([]string{
 							"Import",
-						}, !features.ThreePointOhBeta()),
+						}, features.CaseInsensitive()),
 					},
 				},
 			},
@@ -565,7 +565,7 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 				string(sql.System),
 				string(sql.System2),
 				string(sql.Web),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 		},
 
 		"collation": {
@@ -650,7 +650,7 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 								"Sql_Injection",
 								"Sql_Injection_Vulnerability",
 								"Access_Anomaly",
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 					},
@@ -663,7 +663,7 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 						ValidateFunc: validation.StringInSlice([]string{
 							string(sql.SecurityAlertPolicyEmailAccountAdminsDisabled),
 							string(sql.SecurityAlertPolicyEmailAccountAdminsEnabled),
-						}, !features.ThreePointOhBeta()),
+						}, features.CaseInsensitive()),
 					},
 
 					"email_addresses": {
@@ -690,7 +690,7 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 							string(sql.SecurityAlertPolicyStateDisabled),
 							string(sql.SecurityAlertPolicyStateEnabled),
 							string(sql.SecurityAlertPolicyStateNew),
-						}, !features.ThreePointOhBeta()),
+						}, features.CaseInsensitive()),
 					},
 
 					"storage_account_access_key": {
@@ -733,7 +733,7 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 			ValidateFunc: validation.StringInSlice([]string{
 				string(sql.SecurityAlertPolicyUseServerDefaultDisabled),
 				string(sql.SecurityAlertPolicyUseServerDefaultEnabled),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 			Deprecated: "This field is now non-functional and thus will be removed in version 3.0 of the Azure Provider",
 		}
 	}

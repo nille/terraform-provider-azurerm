@@ -173,7 +173,7 @@ func resourceVirtualMachine() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					"Windows_Client",
 					"Windows_Server",
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 			},
 
 			"vm_size": {
@@ -239,7 +239,7 @@ func resourceVirtualMachine() *pluginsdk.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								string(compute.OperatingSystemTypesLinux),
 								string(compute.OperatingSystemTypesWindows),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 
@@ -275,7 +275,7 @@ func resourceVirtualMachine() *pluginsdk.Resource {
 								string(compute.StorageAccountTypesPremiumLRS),
 								string(compute.StorageAccountTypesStandardLRS),
 								string(compute.StorageAccountTypesStandardSSDLRS),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 
@@ -350,7 +350,7 @@ func resourceVirtualMachine() *pluginsdk.Resource {
 								string(compute.StorageAccountTypesStandardLRS),
 								string(compute.StorageAccountTypesStandardSSDLRS),
 								string(compute.StorageAccountTypesUltraSSDLRS),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 
@@ -498,7 +498,7 @@ func resourceVirtualMachine() *pluginsdk.Resource {
 										ValidateFunc: validation.StringInSlice([]string{
 											"HTTP",
 											"HTTPS",
-										}, !features.ThreePointOhBeta()),
+										}, features.CaseInsensitive()),
 										DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 									},
 									"certificate_url": {

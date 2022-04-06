@@ -76,7 +76,7 @@ func resourceServiceBusTopicSchema() map[string]*pluginsdk.Schema {
 			ValidateFunc: validation.StringInSlice([]string{
 				string(servicebus.EntityStatusActive),
 				string(servicebus.EntityStatusDisabled),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 			DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 		},
 

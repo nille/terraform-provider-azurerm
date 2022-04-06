@@ -63,7 +63,7 @@ func resourceRedisLinkedServer() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					string(redis.ReplicationRolePrimary),
 					string(redis.ReplicationRoleSecondary),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: func() pluginsdk.SchemaDiffSuppressFunc {
 					if !features.ThreePointOhBeta() {
 						return suppress.CaseDifference

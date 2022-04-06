@@ -461,7 +461,7 @@ func resourceArmLoadBalancerSchema() map[string]*pluginsdk.Schema {
 				string(network.LoadBalancerSkuNameBasic),
 				string(network.LoadBalancerSkuNameStandard),
 				string(network.LoadBalancerSkuNameGateway),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 			DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 		},
 

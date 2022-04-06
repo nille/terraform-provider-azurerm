@@ -65,7 +65,7 @@ func resourceCdnProfile() *pluginsdk.Resource {
 					string(cdn.SkuNameStandardVerizon),
 					string(cdn.SkuNameStandardMicrosoft),
 					string(cdn.SkuNamePremiumVerizon),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 

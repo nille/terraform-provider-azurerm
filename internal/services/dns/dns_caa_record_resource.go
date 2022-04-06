@@ -70,7 +70,7 @@ func resourceDnsCaaRecord() *pluginsdk.Resource {
 								"issue",
 								"issuewild",
 								"iodef",
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 

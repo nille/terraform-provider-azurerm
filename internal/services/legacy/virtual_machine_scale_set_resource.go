@@ -140,7 +140,7 @@ func resourceVirtualMachineScaleSet() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					"Windows_Client",
 					"Windows_Server",
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 			},
 
 			"upgrade_policy_mode": {
@@ -150,7 +150,7 @@ func resourceVirtualMachineScaleSet() *pluginsdk.Resource {
 					string(compute.UpgradeModeAutomatic),
 					string(compute.UpgradeModeManual),
 					string(compute.UpgradeModeRolling),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 
@@ -224,7 +224,7 @@ func resourceVirtualMachineScaleSet() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					string(compute.VirtualMachinePriorityTypesLow),
 					string(compute.VirtualMachinePriorityTypesRegular),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 
@@ -591,7 +591,7 @@ func resourceVirtualMachineScaleSet() *pluginsdk.Resource {
 								string(compute.StorageAccountTypesPremiumLRS),
 								string(compute.StorageAccountTypesStandardLRS),
 								string(compute.StorageAccountTypesStandardSSDLRS),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 
@@ -651,7 +651,7 @@ func resourceVirtualMachineScaleSet() *pluginsdk.Resource {
 								string(compute.StorageAccountTypesPremiumLRS),
 								string(compute.StorageAccountTypesStandardLRS),
 								string(compute.StorageAccountTypesStandardSSDLRS),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 					},

@@ -78,7 +78,7 @@ func resourcePublicIp() *pluginsdk.Resource {
 					ValidateFunc: validation.StringInSlice([]string{
 						string(network.IPVersionIPv4),
 						string(network.IPVersionIPv6),
-					}, !features.ThreePointOhBeta()),
+					}, features.CaseInsensitive()),
 				},
 
 				"sku": {
@@ -90,7 +90,7 @@ func resourcePublicIp() *pluginsdk.Resource {
 					ValidateFunc: validation.StringInSlice([]string{
 						string(network.PublicIPAddressSkuNameBasic),
 						string(network.PublicIPAddressSkuNameStandard),
-					}, !features.ThreePointOhBeta()),
+					}, features.CaseInsensitive()),
 				},
 
 				"sku_tier": {

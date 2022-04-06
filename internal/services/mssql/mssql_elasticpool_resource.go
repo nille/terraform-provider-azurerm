@@ -81,7 +81,7 @@ func resourceMsSqlElasticPool() *pluginsdk.Resource {
 								"BC_Gen4",
 								"BC_Gen5",
 								"BC_DC",
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 
@@ -100,7 +100,7 @@ func resourceMsSqlElasticPool() *pluginsdk.Resource {
 								"Premium",
 								"GeneralPurpose",
 								"BusinessCritical",
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 
@@ -112,7 +112,7 @@ func resourceMsSqlElasticPool() *pluginsdk.Resource {
 								"Gen5",
 								"Fsv2",
 								"DC",
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 					},

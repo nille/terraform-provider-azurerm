@@ -663,7 +663,7 @@ func resourceBackupProtectionPolicyFileShareSchema() map[string]*pluginsdk.Schem
 								string(backup.WeekOfMonthThird),
 								string(backup.WeekOfMonthFourth),
 								string(backup.WeekOfMonthLast),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 					},
 
@@ -717,7 +717,7 @@ func resourceBackupProtectionPolicyFileShareSchema() map[string]*pluginsdk.Schem
 								string(backup.WeekOfMonthThird),
 								string(backup.WeekOfMonthFourth),
 								string(backup.WeekOfMonthLast),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 					},
 

@@ -316,7 +316,7 @@ func resourceMySqlServer() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					string(mysql.FiveFullStopSeven),
 					string(mysql.EightFullStopZero),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 				ForceNew:         true,
 			},

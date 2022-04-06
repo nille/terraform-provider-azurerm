@@ -89,7 +89,7 @@ func resourceSynapseWorkspaceSecurityAlertPolicy() *pluginsdk.Resource {
 					string(synapse.SecurityAlertPolicyStateDisabled),
 					string(synapse.SecurityAlertPolicyStateEnabled),
 					string(synapse.SecurityAlertPolicyStateNew),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 

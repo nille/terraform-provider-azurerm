@@ -103,7 +103,7 @@ func resourceLogicAppIntegrationAccountBatchConfiguration() *pluginsdk.Resource 
 											string(logic.RecurrenceFrequencyWeek),
 											string(logic.RecurrenceFrequencyMonth),
 											string(logic.RecurrenceFrequencyYear),
-										}, !features.ThreePointOhBeta()),
+										}, features.CaseInsensitive()),
 									},
 
 									"interval": {
@@ -173,7 +173,7 @@ func resourceLogicAppIntegrationAccountBatchConfiguration() *pluginsdk.Resource 
 																	string(logic.DayOfWeekFriday),
 																	string(logic.DayOfWeekSaturday),
 																	string(logic.DayOfWeekSunday),
-																}, !features.ThreePointOhBeta()),
+																}, features.CaseInsensitive()),
 															},
 
 															"week": {
@@ -203,7 +203,7 @@ func resourceLogicAppIntegrationAccountBatchConfiguration() *pluginsdk.Resource 
 															string(logic.DaysOfWeekFriday),
 															string(logic.DaysOfWeekSaturday),
 															string(logic.DaysOfWeekSunday),
-														}, !features.ThreePointOhBeta()),
+														}, features.CaseInsensitive()),
 													},
 													ConflictsWith: []string{"release_criteria.0.recurrence.0.schedule.0.month_days", "release_criteria.0.recurrence.0.schedule.0.monthly"},
 												},

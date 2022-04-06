@@ -36,7 +36,7 @@ func dataSourceAdvisorRecommendations() *pluginsdk.Resource {
 						string(advisor.Performance),
 						string(advisor.Cost),
 						string(advisor.OperationalExcellence),
-					}, !features.ThreePointOhBeta()),
+					}, features.CaseInsensitive()),
 					DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 				},
 			},

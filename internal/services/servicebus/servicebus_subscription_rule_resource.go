@@ -74,7 +74,7 @@ func resourceServicebusSubscriptionRuleSchema() map[string]*pluginsdk.Schema {
 			ValidateFunc: validation.StringInSlice([]string{
 				string(servicebus.FilterTypeSQLFilter),
 				string(servicebus.FilterTypeCorrelationFilter),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 			DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 		},
 

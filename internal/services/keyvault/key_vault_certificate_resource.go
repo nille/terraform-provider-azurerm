@@ -164,7 +164,7 @@ func resourceKeyVaultCertificate() *pluginsdk.Resource {
 											string(keyvault.RSA),
 											string(keyvault.RSAHSM),
 											string(keyvault.Oct),
-										}, !features.ThreePointOhBeta()),
+										}, features.CaseInsensitive()),
 										DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 									},
 									"reuse_key": {

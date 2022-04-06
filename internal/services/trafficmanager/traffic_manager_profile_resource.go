@@ -59,7 +59,7 @@ func resourceArmTrafficManagerProfile() *pluginsdk.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					string(profiles.ProfileStatusEnabled),
 					string(profiles.ProfileStatusDisabled),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 
@@ -136,7 +136,7 @@ func resourceArmTrafficManagerProfile() *pluginsdk.Resource {
 								string(profiles.MonitorProtocolHTTP),
 								string(profiles.MonitorProtocolHTTPS),
 								string(profiles.MonitorProtocolTCP),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 

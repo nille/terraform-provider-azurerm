@@ -42,7 +42,7 @@ func SchemaHDInsightTier() *pluginsdk.Schema {
 		ValidateFunc: validation.StringInSlice([]string{
 			string(hdinsight.TierStandard),
 			string(hdinsight.TierPremium),
-		}, !features.ThreePointOhBeta()),
+		}, features.CaseInsensitive()),
 		DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 	}
 }

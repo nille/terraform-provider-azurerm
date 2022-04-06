@@ -615,7 +615,7 @@ func resourceBackupProtectionPolicyVMSchema() map[string]*pluginsdk.Schema {
 						ValidateFunc: validation.StringInSlice([]string{
 							string(backup.ScheduleRunTypeDaily),
 							string(backup.ScheduleRunTypeWeekly),
-						}, !features.ThreePointOhBeta()),
+						}, features.CaseInsensitive()),
 					},
 
 					"time": { // applies to all backup schedules & retention times (they all must be the same)
@@ -708,7 +708,7 @@ func resourceBackupProtectionPolicyVMSchema() map[string]*pluginsdk.Schema {
 								string(backup.WeekOfMonthThird),
 								string(backup.WeekOfMonthFourth),
 								string(backup.WeekOfMonthLast),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 					},
 
@@ -762,7 +762,7 @@ func resourceBackupProtectionPolicyVMSchema() map[string]*pluginsdk.Schema {
 								string(backup.WeekOfMonthThird),
 								string(backup.WeekOfMonthFourth),
 								string(backup.WeekOfMonthLast),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 					},
 

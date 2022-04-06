@@ -79,7 +79,7 @@ func resourceLogAnalyticsDataSourceWindowsEvent() *pluginsdk.Resource {
 				Elem: &pluginsdk.Schema{
 					Type: pluginsdk.TypeString,
 					// API backend accepts event_types case-insensitively
-					ValidateFunc:     validation.StringInSlice([]string{"Error", "Warning", "Information"}, !features.ThreePointOhBeta()),
+					ValidateFunc:     validation.StringInSlice([]string{"Error", "Warning", "Information"}, features.CaseInsensitive()),
 					DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 				},
 			},

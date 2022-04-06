@@ -79,7 +79,7 @@ func resourceIotCentralApplication() *pluginsdk.Resource {
 					string(iotcentral.S1),
 					string(iotcentral.ST1),
 					string(iotcentral.ST2),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				Default:          iotcentral.ST1,
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},

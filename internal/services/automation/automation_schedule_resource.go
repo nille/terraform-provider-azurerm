@@ -70,7 +70,7 @@ func resourceAutomationSchedule() *pluginsdk.Resource {
 					string(automation.ScheduleFrequencyMonth),
 					string(automation.ScheduleFrequencyOneTime),
 					string(automation.ScheduleFrequencyWeek),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 			},
 
 			// ignored when frequency is `OneTime`
@@ -123,7 +123,7 @@ func resourceAutomationSchedule() *pluginsdk.Resource {
 						string(automation.ScheduleDayFriday),
 						string(automation.ScheduleDaySaturday),
 						string(automation.ScheduleDaySunday),
-					}, !features.ThreePointOhBeta()),
+					}, features.CaseInsensitive()),
 					DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 				},
 				Set:           set.HashStringIgnoreCase,
@@ -161,7 +161,7 @@ func resourceAutomationSchedule() *pluginsdk.Resource {
 								string(automation.ScheduleDayFriday),
 								string(automation.ScheduleDaySaturday),
 								string(automation.ScheduleDaySunday),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 						"occurrence": {
 							Type:     pluginsdk.TypeInt,

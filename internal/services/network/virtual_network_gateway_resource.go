@@ -67,7 +67,7 @@ func resourceVirtualNetworkGatewaySchema() map[string]*pluginsdk.Schema {
 			ValidateFunc: validation.StringInSlice([]string{
 				string(network.VirtualNetworkGatewayTypeExpressRoute),
 				string(network.VirtualNetworkGatewayTypeVpn),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 		},
 
 		"vpn_type": {
@@ -79,7 +79,7 @@ func resourceVirtualNetworkGatewaySchema() map[string]*pluginsdk.Schema {
 			ValidateFunc: validation.StringInSlice([]string{
 				string(network.VpnTypeRouteBased),
 				string(network.VpnTypePolicyBased),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 		},
 
 		"edge_zone": commonschema.EdgeZoneOptionalForceNew(),
@@ -285,7 +285,7 @@ func resourceVirtualNetworkGatewaySchema() map[string]*pluginsdk.Schema {
 								string(network.VpnClientProtocolIkeV2),
 								string(network.VpnClientProtocolOpenVPN),
 								string(network.VpnClientProtocolSSTP),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 					},

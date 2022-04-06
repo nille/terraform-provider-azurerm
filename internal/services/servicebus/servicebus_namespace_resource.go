@@ -79,7 +79,7 @@ func resourceServiceBusNamespace() *pluginsdk.Resource {
 					string(servicebus.SkuNameBasic),
 					string(servicebus.SkuNameStandard),
 					string(servicebus.SkuNamePremium),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 

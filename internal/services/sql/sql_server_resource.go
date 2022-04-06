@@ -117,7 +117,7 @@ func resourceSqlServer() *pluginsdk.Resource {
 									"Access_Anomaly",
 									"Data_Exfiltration",
 									"Unsafe_Action",
-								}, !features.ThreePointOhBeta()),
+								}, features.CaseInsensitive()),
 								DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 							},
 						},
@@ -153,7 +153,7 @@ func resourceSqlServer() *pluginsdk.Resource {
 								string(sql.SecurityAlertPolicyStateDisabled),
 								string(sql.SecurityAlertPolicyStateEnabled),
 								string(sql.SecurityAlertPolicyStateNew), // Only kept for backward compatibility - TODO investigate if we can remove this in 4.0
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 						},
 
 						"storage_account_access_key": {

@@ -168,7 +168,7 @@ func resourceCdnEndpoint() *pluginsdk.Resource {
 							ValidateFunc: validation.StringInSlice([]string{
 								string(cdn.ActionTypeAllow),
 								string(cdn.ActionTypeBlock),
-							}, !features.ThreePointOhBeta()),
+							}, features.CaseInsensitive()),
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 						},
 						"country_codes": {
@@ -191,7 +191,7 @@ func resourceCdnEndpoint() *pluginsdk.Resource {
 					string(cdn.OptimizationTypeGeneralWebDelivery),
 					string(cdn.OptimizationTypeLargeFileDownload),
 					string(cdn.OptimizationTypeVideoOnDemandMediaStreaming),
-				}, !features.ThreePointOhBeta()),
+				}, features.CaseInsensitive()),
 				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 

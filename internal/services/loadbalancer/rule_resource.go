@@ -410,7 +410,7 @@ func resourceArmLoadBalancerRuleSchema() map[string]*pluginsdk.Schema {
 				string(network.TransportProtocolAll),
 				string(network.TransportProtocolTCP),
 				string(network.TransportProtocolUDP),
-			}, !features.ThreePointOhBeta()),
+			}, features.CaseInsensitive()),
 		},
 
 		"frontend_port": {
