@@ -286,7 +286,6 @@ func resourceFunctionAppCreate(d *pluginsdk.ResourceData, meta interface{}) erro
 
 	appServicePlanID := d.Get("app_service_plan_id").(string)
 	enabled := d.Get("enabled").(bool)
-	clientAffinityEnabled := d.Get("client_affinity_enabled").(bool)
 	clientCertMode := d.Get("client_cert_mode").(string)
 	clientCertEnabled := clientCertMode != ""
 	httpsOnly := d.Get("https_only").(bool)
@@ -316,13 +315,12 @@ func resourceFunctionAppCreate(d *pluginsdk.ResourceData, meta interface{}) erro
 		Location: &location,
 		Tags:     tags.Expand(t),
 		SiteProperties: &web.SiteProperties{
-			ServerFarmID:          utils.String(appServicePlanID),
-			Enabled:               utils.Bool(enabled),
-			ClientAffinityEnabled: utils.Bool(clientAffinityEnabled),
-			ClientCertEnabled:     utils.Bool(clientCertEnabled),
-			HTTPSOnly:             utils.Bool(httpsOnly),
-			DailyMemoryTimeQuota:  utils.Int32(int32(dailyMemoryTimeQuota)),
-			SiteConfig:            &siteConfig,
+			ServerFarmID:         utils.String(appServicePlanID),
+			Enabled:              utils.Bool(enabled),
+			ClientCertEnabled:    utils.Bool(clientCertEnabled),
+			HTTPSOnly:            utils.Bool(httpsOnly),
+			DailyMemoryTimeQuota: utils.Int32(int32(dailyMemoryTimeQuota)),
+			SiteConfig:           &siteConfig,
 		},
 	}
 
@@ -404,7 +402,6 @@ func resourceFunctionAppUpdate(d *pluginsdk.ResourceData, meta interface{}) erro
 	}
 	appServicePlanID := d.Get("app_service_plan_id").(string)
 	enabled := d.Get("enabled").(bool)
-	clientAffinityEnabled := d.Get("client_affinity_enabled").(bool)
 	clientCertMode := d.Get("client_cert_mode").(string)
 	clientCertEnabled := clientCertMode != ""
 	httpsOnly := d.Get("https_only").(bool)
@@ -451,13 +448,12 @@ func resourceFunctionAppUpdate(d *pluginsdk.ResourceData, meta interface{}) erro
 		Location: &location,
 		Tags:     tags.Expand(t),
 		SiteProperties: &web.SiteProperties{
-			ServerFarmID:          utils.String(appServicePlanID),
-			Enabled:               utils.Bool(enabled),
-			ClientAffinityEnabled: utils.Bool(clientAffinityEnabled),
-			ClientCertEnabled:     utils.Bool(clientCertEnabled),
-			HTTPSOnly:             utils.Bool(httpsOnly),
-			DailyMemoryTimeQuota:  utils.Int32(int32(dailyMemoryTimeQuota)),
-			SiteConfig:            &siteConfig,
+			ServerFarmID:         utils.String(appServicePlanID),
+			Enabled:              utils.Bool(enabled),
+			ClientCertEnabled:    utils.Bool(clientCertEnabled),
+			HTTPSOnly:            utils.Bool(httpsOnly),
+			DailyMemoryTimeQuota: utils.Int32(int32(dailyMemoryTimeQuota)),
+			SiteConfig:           &siteConfig,
 		},
 	}
 
@@ -646,7 +642,6 @@ func resourceFunctionAppRead(d *pluginsdk.ResourceData, meta interface{}) error 
 		d.Set("daily_memory_time_quota", props.DailyMemoryTimeQuota)
 		d.Set("outbound_ip_addresses", props.OutboundIPAddresses)
 		d.Set("possible_outbound_ip_addresses", props.PossibleOutboundIPAddresses)
-		d.Set("client_affinity_enabled", props.ClientAffinityEnabled)
 		d.Set("custom_domain_verification_id", props.CustomDomainVerificationID)
 
 		clientCertMode := ""
