@@ -359,26 +359,23 @@ func resourceApplicationGateway() *pluginsdk.Resource {
 						"subnet_id": {
 							Type:     pluginsdk.TypeString,
 							Optional: true,
-							Computed: true,
 						},
 
 						"private_ip_address": {
 							Type:     pluginsdk.TypeString,
 							Optional: true,
-							Computed: true,
 						},
 
 						"public_ip_address_id": {
 							Type:     pluginsdk.TypeString,
 							Optional: true,
-							Computed: true,
 						},
 
 						"private_ip_address_allocation": {
 							Type:             pluginsdk.TypeString,
 							Optional:         true,
-							Computed:         true,
 							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+							Default:          string(network.IPAllocationMethodDynamic),
 							ValidateFunc: validation.StringInSlice([]string{
 								string(network.IPAllocationMethodDynamic),
 								string(network.IPAllocationMethodStatic),
