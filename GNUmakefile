@@ -130,7 +130,7 @@ teamcity-test:
 	@$(MAKE) -C .teamcity tools
 	@$(MAKE) -C .teamcity test
 
-validate-examples:
+validate-examples: build
 	./scripts/validate-examples.sh
 
 pr-check: generate build test lint tflint website-lint

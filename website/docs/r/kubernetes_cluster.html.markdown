@@ -120,9 +120,13 @@ In addition, one of either `identity` or `service_principal` blocks must be spec
 
 * `local_account_disabled` - (Optional) - If `true` local accounts will be disabled. Defaults to `false`. See [the documentation](https://docs.microsoft.com/en-us/azure/aks/managed-aad#disable-local-accounts) for more information.
 
--> **NOTE:** If `local_account_disabled` is set to `true`, it is required to enable Kubernetes RBAC and AKS-managed Azure AD integration. See [the documentation](https://docs.microsoft.com/en-us/azure/aks/managed-aad#azure-ad-authentication-overview) for more information.
+-> **Note:** If `local_account_disabled` is set to `true`, it is required to enable Kubernetes RBAC and AKS-managed Azure AD integration. See [the documentation](https://docs.microsoft.com/en-us/azure/aks/managed-aad#azure-ad-authentication-overview) for more information.
 
 * `maintenance_window` - (Optional) A `maintenance_window` block as defined below.
+
+* `microsoft_defender` - (Optional) A `microsoft_defender` block as defined below.
+
+-> **Note:** This requires that the Preview Feature `Microsoft.ContainerService/AKS-AzureDefender` is enabled, see [the documentation](https://docs.microsoft.com/azure/defender-for-cloud/defender-for-containers-enable?tabs=aks-deploy-portal%2Ck8s-deploy-asc%2Ck8s-verify-asc%2Ck8s-remove-arc%2Caks-removeprofile-api&pivots=defender-for-container-aks) for more information.
 
 * `network_profile` - (Optional) A `network_profile` block as defined below.
 
@@ -373,7 +377,7 @@ If `enable_auto_scaling` is set to `false`, then the following fields can also b
 
 * `zones` - (Optional) Specifies a list of Availability Zones in which this Kubernetes Cluster should be located. Changing this forces a new Kubernetes Cluster to be created.
 
--> **Note:** This requires that the `type` is set to `VirtualMachineScaleSets` and that `load_balancer_sku` is set to `Standard`.
+-> **Note:** This requires that the `type` is set to `VirtualMachineScaleSets` and that `load_balancer_sku` is set to `standard`.
 
 ---
 
@@ -457,6 +461,12 @@ A `maintenance_window` block supports the following:
 
 ---
 
+A `microsoft_defender` block supports the following:
+
+* `log_analytics_workspace_id` - (Required) Specifies the ID of the Log Analytics Workspace where the audit logs collected by Microsoft Defender should be sent to.
+
+---
+
 An `allowed` block exports the following:
 
 * `day` - (Required) A day in a week. Possible values are `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` and `Saturday`.
@@ -503,17 +513,23 @@ A `network_profile` block supports the following:
 
 ~> **Note:** This range should not be used by any network element on or connected to this VNet. Service address CIDR must be smaller than /12. `docker_bridge_cidr`, `dns_service_ip` and `service_cidr` should all be empty or all should be set.
 
-* `load_balancer_sku` - (Optional) Specifies the SKU of the Load Balancer used for this Kubernetes Cluster. Possible values are `Basic` and `Standard`. Defaults to `Standard`.
+* `ip_versions` - (Optional) Specifies a list of IP versions the Kubernetes Cluster will use to assign IP addresses to its nodes and pods. Possible values are `IPv4` and/or `IPv6`. `IPv4` must always be specified. Changing this forces a new resource to be created.
 
-* `load_balancer_profile` - (Optional) A `load_balancer_profile` block. This can only be specified when `load_balancer_sku` is set to `Standard`.
+->**Note:** To configure dual-stack networking `ip_versions` should be set to `["IPv4", "IPv6"]`
 
-* `nat_gateway_profile` - (Optional) A `nat_gateway_profile` block. This can only be specified when `load_balancer_sku` is set to `Standard` and `outbound_type` is set to `managedNATGateway` or `userAssignedNATGateway`.
+->**Note:** Dual-stack networking requires that the Preview Feature `Microsoft.ContainerService/AKS-EnableDualStack` is enabled and the Resource Provider is re-registered, see [the documentation](https://docs.microsoft.com/azure/aks/configure-kubenet-dual-stack?tabs=azure-cli%2Ckubectl#register-the-aks-enabledualstack-preview-feature) for more information.
+
+* `load_balancer_sku` - (Optional) Specifies the SKU of the Load Balancer used for this Kubernetes Cluster. Possible values are `basic` and `standard`. Defaults to `standard`.
+
+* `load_balancer_profile` - (Optional) A `load_balancer_profile` block. This can only be specified when `load_balancer_sku` is set to `standard`.
+
+* `nat_gateway_profile` - (Optional) A `nat_gateway_profile` block. This can only be specified when `load_balancer_sku` is set to `standard` and `outbound_type` is set to `managedNATGateway` or `userAssignedNATGateway`.
 
 ---
 
 A `load_balancer_profile` block supports the following:
 
-~> **Note:** The fields `managed_outbound_ip_count`, `outbound_ip_address_ids` and `outbound_ip_prefix_ids` are mutually exclusive. Note that when specifying `outbound_ip_address_ids` ([azurerm_public_ip](/docs/providers/azurerm/r/public_ip.html)) the SKU must be `Standard`.
+~> **Note:** The fields `managed_outbound_ip_count`, `outbound_ip_address_ids` and `outbound_ip_prefix_ids` are mutually exclusive. Note that when specifying `outbound_ip_address_ids` ([azurerm_public_ip](/docs/providers/azurerm/r/public_ip.html)) the SKU must be `standard`.
 
 * `idle_timeout_in_minutes` - (Optional) Desired outbound flow idle timeout in minutes for the cluster load balancer. Must be between `4` and `120` inclusive. Defaults to `30`.
 
@@ -536,12 +552,6 @@ A `nat_gateway_profile` block supports the following:
 * `idle_timeout_in_minutes` - (Optional) Desired outbound flow idle timeout in minutes for the cluster load balancer. Must be between `4` and `120` inclusive. Defaults to `4`.
 
 * `managed_outbound_ip_count` - (Optional) Count of desired managed outbound IPs for the cluster load balancer. Must be between `1` and `100` inclusive.
-
-* `ip_versions` - (Optional) Specifies a list of IP versions the Kubernetes Cluster will use to assign IP addresses to its nodes and pods. Possible values are `IPv4` and/or `IPv6`. `IPv4` must always be specified. Changing this forces a new resource to be created.
-
-->**Note:** To configure dual-stack networking `ip_versions` should be set to `["IPv4", "IPv6"]`
-
-->**Note:** Dual-stack networking requires that the Preview Feature `Microsoft.ContainerService/AKS-EnableDualStack` is enabled and the Resource Provider is re-registered, see [the documentation](https://docs.microsoft.com/azure/aks/configure-kubenet-dual-stack?tabs=azure-cli%2Ckubectl#register-the-aks-enabledualstack-preview-feature) for more information.
 
 ---
 
