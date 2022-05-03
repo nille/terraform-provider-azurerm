@@ -34,7 +34,7 @@ output "hostname" {
 
 * `resource_group_name` - The name of the resource group the Redis cache instance is located in.
 
-## Attribute Reference
+## Attributes Reference
 
 * `id` - The Cache ID.
 
@@ -98,13 +98,13 @@ A `redis_configuration` block exports the following:
 
 * `maxfragmentationmemory_reserved` - Value in megabytes reserved to accommodate for memory fragmentation.
 
-* `rdb_backup_enabled` - Is Backup Enabled? Only supported on Premium SKU's.
+* `rdb_backup_enabled` - Is Backup Enabled? Only supported on Premium SKUs.
 
-* `rdb_backup_frequency` - The Backup Frequency in Minutes. Only supported on Premium SKU's.
+* `rdb_backup_frequency` - The Backup Frequency in Minutes. Only supported on Premium SKUs.
 
 * `rdb_backup_max_snapshot_count` - The maximum number of snapshots that can be created as a backup.
 
-* `rdb_storage_connection_string` - The Connection String to the Storage Account. Only supported for Premium SKU's.
+* `rdb_storage_connection_string` - The Connection String to the Storage Account. Only supported for Premium SKUs.
 
 ## Timeouts
 
