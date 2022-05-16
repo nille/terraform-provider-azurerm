@@ -27,15 +27,15 @@ variable "video_link" {
 
 data "azurerm_subscription" "current" {}
 
-resource "azurerm_resource_group" "my-group" {
+resource "azurerm_resource_group" "example" {
   name     = "mygroup"
   location = "West Europe"
 }
 
 resource "azurerm_dashboard" "my-board" {
   name                = "my-cool-dashboard"
-  resource_group_name = azurerm_resource_group.my-group.name
-  location            = azurerm_resource_group.my-group.location
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
   tags = {
     source = "managed"
   }
@@ -197,8 +197,8 @@ Since the contents of the dashboard JSON can be quite lengthy, use a template fi
 ```hcl
 resource "azurerm_dashboard" "my-board" {
   name                = "my-cool-dashboard"
-  resource_group_name = azurerm_resource_group.my-group.name
-  location            = azurerm_resource_group.my-group.location
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
   tags = {
     source = "managed"
   }
