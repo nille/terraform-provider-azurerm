@@ -328,9 +328,6 @@ func flattenArmSqlServerThreatDetectionPolicy(d *pluginsdk.ResourceData, policy 
 
 	threatDetectionPolicy["state"] = string(properties.State)
 	threatDetectionPolicy["email_account_admins"] = string(properties.EmailAccountAdmins)
-	if !features.ThreePointOhBeta() {
-		threatDetectionPolicy["use_server_default"] = string(properties.UseServerDefault)
-	}
 
 	if disabledAlerts := properties.DisabledAlerts; disabledAlerts != nil {
 		flattenedAlerts := pluginsdk.NewSet(pluginsdk.HashString, []interface{}{})
@@ -404,9 +401,6 @@ func expandArmSqlServerThreatDetectionPolicy(d *pluginsdk.ResourceData, location
 
 		properties.State = sql.SecurityAlertPolicyState(threatDetection["state"].(string))
 		properties.EmailAccountAdmins = sql.SecurityAlertPolicyEmailAccountAdmins(threatDetection["email_account_admins"].(string))
-		if !features.ThreePointOhBeta() {
-			properties.UseServerDefault = sql.SecurityAlertPolicyUseServerDefault(threatDetection["use_server_default"].(string))
-		}
 
 		if v, ok := threatDetection["disabled_alerts"]; ok {
 			alerts := v.(*pluginsdk.Set).List()
@@ -461,10 +455,9 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 		},
 
 		"create_mode": {
-			Type:             pluginsdk.TypeString,
-			Optional:         true,
-			Default:          string(sql.Default),
-			DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+			Type:     pluginsdk.TypeString,
+			Optional: true,
+			Default:  string(sql.Default),
 			ValidateFunc: validation.StringInSlice([]string{
 				string(sql.CreateModeCopy),
 				string(sql.CreateModeDefault),
@@ -493,9 +486,8 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 						Sensitive: true,
 					},
 					"storage_key_type": {
-						Type:             pluginsdk.TypeString,
-						Required:         true,
-						DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+						Type:     pluginsdk.TypeString,
+						Required: true,
 						ValidateFunc: validation.StringInSlice([]string{
 							"StorageAccessKey",
 							"SharedAccessKey",
@@ -511,19 +503,17 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 						Sensitive: true,
 					},
 					"authentication_type": {
-						Type:             pluginsdk.TypeString,
-						Required:         true,
-						DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+						Type:     pluginsdk.TypeString,
+						Required: true,
 						ValidateFunc: validation.StringInSlice([]string{
 							"ADPassword",
 							"SQL",
 						}, features.CaseInsensitive()),
 					},
 					"operation_mode": {
-						Type:             pluginsdk.TypeString,
-						Optional:         true,
-						Default:          "Import",
-						DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+						Type:     pluginsdk.TypeString,
+						Optional: true,
+						Default:  "Import",
 						ValidateFunc: validation.StringInSlice([]string{
 							"Import",
 						}, features.CaseInsensitive()),
@@ -546,10 +536,9 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 		},
 
 		"edition": {
-			Type:             pluginsdk.TypeString,
-			Optional:         true,
-			Computed:         true,
-			DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+			Type:     pluginsdk.TypeString,
+			Optional: true,
+			Computed: true,
 			ValidateFunc: validation.StringInSlice([]string{
 				string(sql.Basic),
 				string(sql.Business),
@@ -656,10 +645,9 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 					},
 
 					"email_account_admins": {
-						Type:             pluginsdk.TypeString,
-						Optional:         true,
-						DiffSuppressFunc: suppress.CaseDifferenceV2Only,
-						Default:          string(sql.SecurityAlertPolicyEmailAccountAdminsDisabled),
+						Type:     pluginsdk.TypeString,
+						Optional: true,
+						Default:  string(sql.SecurityAlertPolicyEmailAccountAdminsDisabled),
 						ValidateFunc: validation.StringInSlice([]string{
 							string(sql.SecurityAlertPolicyEmailAccountAdminsDisabled),
 							string(sql.SecurityAlertPolicyEmailAccountAdminsEnabled),
@@ -682,10 +670,9 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 					},
 
 					"state": {
-						Type:             pluginsdk.TypeString,
-						Optional:         true,
-						DiffSuppressFunc: suppress.CaseDifferenceV2Only,
-						Default:          string(sql.SecurityAlertPolicyStateDisabled),
+						Type:     pluginsdk.TypeString,
+						Optional: true,
+						Default:  string(sql.SecurityAlertPolicyStateDisabled),
 						ValidateFunc: validation.StringInSlice([]string{
 							string(sql.SecurityAlertPolicyStateDisabled),
 							string(sql.SecurityAlertPolicyStateEnabled),

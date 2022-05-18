@@ -2,6 +2,7 @@ package iotcentral
 
 import (
 	"fmt"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"time"
 
 	"github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2018-09-01/iotcentral"
@@ -10,7 +11,6 @@ import (
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/azure"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/iotcentral/migration"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/iotcentral/parse"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/iotcentral/validate"

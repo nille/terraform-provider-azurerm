@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/servicebus/parse"
 	azValidate "github.com/hashicorp/terraform-provider-azurerm/internal/services/servicebus/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
@@ -44,7 +43,7 @@ func resourceServiceBusQueue() *pluginsdk.Resource {
 // FORK: @stack72: Ensured the ResourceGroupName and NamespaceName was available as a computed attribute for use
 // in the servicebus mixins in Pulumi
 func resourceServicebusQueueSchema() map[string]*pluginsdk.Schema {
-	s := map[string]*pluginsdk.Schema{
+	return map[string]*pluginsdk.Schema{
 		"name": {
 			Type:         pluginsdk.TypeString,
 			Required:     true,
@@ -55,17 +54,9 @@ func resourceServicebusQueueSchema() map[string]*pluginsdk.Schema {
 		//lintignore: S013
 		"namespace_id": {
 			Type:         pluginsdk.TypeString,
-			Required:     features.ThreePointOhBeta(),
-			Optional:     !features.ThreePointOhBeta(),
-			Computed:     !features.ThreePointOhBeta(),
+			Required:     true,
 			ForceNew:     true,
 			ValidateFunc: azValidate.NamespaceID,
-			ConflictsWith: func() []string {
-				if !features.ThreePointOhBeta() {
-					return []string{"namespace_name", "resource_group_name"}
-				}
-				return []string{}
-			}(),
 		},
 
 		// Optional
@@ -197,13 +188,10 @@ func resourceServicebusQueueSchema() map[string]*pluginsdk.Schema {
 			}, false),
 		},
 	}
-
-	return s
 }
 
 func resourceServiceBusQueueCreateUpdate(d *pluginsdk.ResourceData, meta interface{}) error {
 	client := meta.(*clients.Client).ServiceBus.QueuesClient
-	subscriptionId := meta.(*clients.Client).Account.SubscriptionId
 	ctx, cancel := timeouts.ForCreateUpdate(meta.(*clients.Client).StopContext, d)
 	defer cancel()
 	log.Printf("[INFO] preparing arguments for ServiceBus Queue creation/update.")
@@ -212,8 +200,6 @@ func resourceServiceBusQueueCreateUpdate(d *pluginsdk.ResourceData, meta interfa
 	if namespaceIdLit := d.Get("namespace_id").(string); namespaceIdLit != "" {
 		namespaceId, _ := parse.NamespaceID(namespaceIdLit)
 		resourceId = parse.NewQueueID(namespaceId.SubscriptionId, namespaceId.ResourceGroup, namespaceId.Name, d.Get("name").(string))
-	} else if !features.ThreePointOhBeta() {
-		resourceId = parse.NewQueueID(subscriptionId, d.Get("resource_group_name").(string), d.Get("namespace_name").(string), d.Get("name").(string))
 	}
 
 	deadLetteringOnMessageExpiration := d.Get("dead_lettering_on_message_expiration").(bool)

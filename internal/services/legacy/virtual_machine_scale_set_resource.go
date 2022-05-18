@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"log"
 	"strings"
 	"time"
@@ -13,7 +14,6 @@ import (
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/compute/migration"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/compute/parse"
 	validate2 "github.com/hashicorp/terraform-provider-azurerm/internal/services/compute/validate"
@@ -133,10 +133,9 @@ func resourceVirtualMachineScaleSet() *pluginsdk.Resource {
 			},
 
 			"license_type": {
-				Type:             pluginsdk.TypeString,
-				Optional:         true,
-				Computed:         true,
-				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+				Type:     pluginsdk.TypeString,
+				Optional: true,
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"Windows_Client",
 					"Windows_Server",

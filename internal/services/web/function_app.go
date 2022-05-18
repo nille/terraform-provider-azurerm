@@ -3,16 +3,16 @@ package web
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
 	"log"
 	"strings"
 
 	"github.com/Azure/azure-sdk-for-go/services/web/mgmt/2021-02-01/web"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/web/parse"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/validation"
 	"github.com/hashicorp/terraform-provider-azurerm/utils"
 )
@@ -295,11 +295,6 @@ func getBasicFunctionAppAppSettings(d *pluginsdk.ResourceData, appServiceTier, e
 	contentFileConnStringPropName := "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING"
 
 	var storageConnection string
-	if !features.ThreePointOhBeta() {
-		if v, ok := d.GetOk("storage_connection_string"); ok {
-			storageConnection = v.(string)
-		}
-	}
 
 	storageAccountName := ""
 	if v, ok := d.GetOk("storage_account_name"); ok {
@@ -311,9 +306,7 @@ func getBasicFunctionAppAppSettings(d *pluginsdk.ResourceData, appServiceTier, e
 		storageAccountKey = v.(string)
 	}
 
-	if (storageConnection == "" && !features.ThreePointOhBeta()) && storageAccountName == "" && storageAccountKey == "" {
-		return nil, fmt.Errorf("one of `storage_connection_string` or `storage_account_name` and `storage_account_access_key` must be specified")
-	} else if features.ThreePointOhBeta() && (storageAccountName == "" && storageAccountKey == "") {
+	if storageAccountName == "" && storageAccountKey == "" {
 		return nil, fmt.Errorf("Both `storage_account_name` and `storage_account_access_key` must be specified")
 	}
 

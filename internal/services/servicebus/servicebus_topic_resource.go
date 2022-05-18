@@ -2,6 +2,8 @@ package servicebus
 
 import (
 	"fmt"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
 	"log"
 	"time"
 
@@ -9,11 +11,9 @@ import (
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/servicebus/parse"
 	azValidate "github.com/hashicorp/terraform-provider-azurerm/internal/services/servicebus/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/validation"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/timeouts"
 	"github.com/hashicorp/terraform-provider-azurerm/utils"
@@ -45,7 +45,7 @@ func resourceServiceBusTopic() *pluginsdk.Resource {
 // FORK: @stack72: Ensured the ResourceGroupName and NamespaceName was available as a computed attribute for use
 // in the servicebus mixins in Pulumi
 func resourceServiceBusTopicSchema() map[string]*pluginsdk.Schema {
-	out := map[string]*pluginsdk.Schema{
+	return map[string]*pluginsdk.Schema{
 		"name": {
 			Type:         pluginsdk.TypeString,
 			Required:     true,
@@ -56,17 +56,9 @@ func resourceServiceBusTopicSchema() map[string]*pluginsdk.Schema {
 		//lintignore: S013
 		"namespace_id": {
 			Type:         pluginsdk.TypeString,
-			Required:     features.ThreePointOhBeta(),
-			Optional:     !features.ThreePointOhBeta(),
-			Computed:     !features.ThreePointOhBeta(),
+			Required:     true,
 			ForceNew:     true,
 			ValidateFunc: azValidate.NamespaceID,
-			ConflictsWith: func() []string {
-				if !features.ThreePointOhBeta() {
-					return []string{"namespace_name", "resource_group_name"}
-				}
-				return []string{}
-			}(),
 		},
 
 		"status": {
@@ -155,8 +147,6 @@ func resourceServiceBusTopicSchema() map[string]*pluginsdk.Schema {
 			Computed: true,
 		},
 	}
-
-	return out
 }
 
 func resourceServiceBusTopicCreateUpdate(d *pluginsdk.ResourceData, meta interface{}) error {
@@ -174,14 +164,10 @@ func resourceServiceBusTopicCreateUpdate(d *pluginsdk.ResourceData, meta interfa
 	requiresDuplicateDetection := d.Get("requires_duplicate_detection").(bool)
 	supportOrdering := d.Get("support_ordering").(bool)
 
-	subscriptionId := meta.(*clients.Client).Account.SubscriptionId
-
 	var resourceId parse.TopicId
 	if namespaceIdLit := d.Get("namespace_id").(string); namespaceIdLit != "" {
 		namespaceId, _ := parse.NamespaceID(namespaceIdLit)
 		resourceId = parse.NewTopicID(namespaceId.SubscriptionId, namespaceId.ResourceGroup, namespaceId.Name, d.Get("name").(string))
-	} else if !features.ThreePointOhBeta() {
-		resourceId = parse.NewTopicID(subscriptionId, d.Get("resource_group_name").(string), d.Get("namespace_name").(string), d.Get("name").(string))
 	}
 
 	if d.IsNewResource() {

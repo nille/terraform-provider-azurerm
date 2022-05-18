@@ -2,13 +2,13 @@ package web
 
 import (
 	"fmt"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"log"
 	"strings"
 
 	"github.com/hashicorp/go-azure-helpers/resourcemanager/identity"
 
 	"github.com/Azure/azure-sdk-for-go/services/web/mgmt/2021-02-01/web"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/validation"
@@ -354,20 +354,10 @@ func schemaAppServiceSiteConfig() *pluginsdk.Schema {
 					Optional:         true,
 					Computed:         true,
 					DiffSuppressFunc: suppress.CaseDifferenceV2Only,
-					ValidateFunc: func() pluginsdk.SchemaValidateFunc {
-						out := []string{
-							"VS2017",
-							"VS2019",
-						}
-						if !features.ThreePointOhBeta() {
-							out = append(out, []string{
-								"VS2012",
-								"VS2013",
-								"VS2015",
-							}...)
-						}
-						return validation.StringInSlice(out, !features.ThreePointOhBeta())
-					}(),
+					ValidateFunc: validation.StringInSlice([]string{
+						"VS2017",
+						"VS2019",
+					}, false),
 				},
 
 				"scm_type": {

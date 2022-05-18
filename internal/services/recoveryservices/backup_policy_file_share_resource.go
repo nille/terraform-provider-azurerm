@@ -3,6 +3,7 @@ package recoveryservices
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"log"
 	"regexp"
 	"strings"
@@ -13,10 +14,8 @@ import (
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/azure"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/recoveryservices/parse"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/recoveryservices/validate"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/tags"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/set"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
@@ -544,7 +543,7 @@ func resourceBackupProtectionPolicyFileShareRefreshFunc(ctx context.Context, cli
 }
 
 func resourceBackupProtectionPolicyFileShareSchema() map[string]*pluginsdk.Schema {
-	schema := map[string]*pluginsdk.Schema{
+	return map[string]*pluginsdk.Schema{
 		"name": {
 			Type:     pluginsdk.TypeString,
 			Required: true,
@@ -655,8 +654,7 @@ func resourceBackupProtectionPolicyFileShareSchema() map[string]*pluginsdk.Schem
 						Required: true,
 						Set:      set.HashStringIgnoreCase,
 						Elem: &pluginsdk.Schema{
-							Type:             pluginsdk.TypeString,
-							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+							Type: pluginsdk.TypeString,
 							ValidateFunc: validation.StringInSlice([]string{
 								string(backup.WeekOfMonthFirst),
 								string(backup.WeekOfMonthSecond),
@@ -709,8 +707,7 @@ func resourceBackupProtectionPolicyFileShareSchema() map[string]*pluginsdk.Schem
 						Required: true,
 						Set:      set.HashStringIgnoreCase,
 						Elem: &pluginsdk.Schema{
-							Type:             pluginsdk.TypeString,
-							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+							Type: pluginsdk.TypeString,
 							ValidateFunc: validation.StringInSlice([]string{
 								string(backup.WeekOfMonthFirst),
 								string(backup.WeekOfMonthSecond),
@@ -735,10 +732,4 @@ func resourceBackupProtectionPolicyFileShareSchema() map[string]*pluginsdk.Schem
 			},
 		},
 	}
-
-	if !features.ThreePointOhBeta() {
-		schema["tags"] = tags.SchemaDeprecatedUnsupported()
-	}
-
-	return schema
 }

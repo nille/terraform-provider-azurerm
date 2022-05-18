@@ -3,6 +3,7 @@ package redis
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"log"
 	"strconv"
 	"strings"
@@ -19,7 +20,6 @@ import (
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	azValidate "github.com/hashicorp/terraform-provider-azurerm/helpers/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/locks"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/network"
 	networkParse "github.com/hashicorp/terraform-provider-azurerm/internal/services/network/parse"
@@ -63,13 +63,7 @@ func resourceRedisCache() *pluginsdk.Resource {
 
 			"resource_group_name": commonschema.ResourceGroupName(),
 
-			"zones": func() *schema.Schema {
-				if !features.ThreePointOhBeta() {
-					return azure.SchemaMultipleZones()
-				}
-
-				return commonschema.ZonesMultipleOptionalForceNew()
-			}(),
+			"zones": commonschema.ZonesMultipleOptionalForceNew(),
 
 			"capacity": {
 				Type:     pluginsdk.TypeInt,
@@ -97,12 +91,7 @@ func resourceRedisCache() *pluginsdk.Resource {
 			"minimum_tls_version": {
 				Type:     pluginsdk.TypeString,
 				Optional: true,
-				Default: func() interface{} {
-					if features.ThreePointOhBeta() {
-						return string(redis.TLSVersionOneFullStopTwo)
-					}
-					return string(redis.TLSVersionOneFullStopZero)
-				}(),
+				Default:  string(redis.TLSVersionOneFullStopTwo),
 				ValidateFunc: validation.StringInSlice([]string{
 					string(redis.TLSVersionOneFullStopZero),
 					string(redis.TLSVersionOneFullStopOne),
@@ -441,16 +430,9 @@ func resourceRedisCacheCreate(d *pluginsdk.ResourceData, meta interface{}) error
 	}
 
 	if v, ok := d.GetOk("zones"); ok {
-		if features.ThreePointOhBeta() {
-			zones := zones.Expand(v.(*schema.Set).List())
-			if len(zones) > 0 {
-				parameters.Zones = &zones
-			}
-		} else {
-			zones := zones.Expand(v.([]interface{}))
-			if len(zones) > 0 {
-				parameters.Zones = &zones
-			}
+		zones := zones.Expand(v.(*schema.Set).List())
+		if len(zones) > 0 {
+			parameters.Zones = &zones
 		}
 	}
 
