@@ -61,9 +61,8 @@ func resourceAutomationSchedule() *pluginsdk.Resource {
 			},
 
 			"frequency": {
-				Type:             pluginsdk.TypeString,
-				Required:         true,
-				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+				Type:     pluginsdk.TypeString,
+				Required: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					string(automation.ScheduleFrequencyDay),
 					string(automation.ScheduleFrequencyHour),
@@ -150,9 +149,8 @@ func resourceAutomationSchedule() *pluginsdk.Resource {
 				Elem: &pluginsdk.Resource{
 					Schema: map[string]*pluginsdk.Schema{
 						"day": {
-							Type:             pluginsdk.TypeString,
-							Required:         true,
-							DiffSuppressFunc: suppress.CaseDifferenceV2Only,
+							Type:     pluginsdk.TypeString,
+							Required: true,
 							ValidateFunc: validation.StringInSlice([]string{
 								string(automation.ScheduleDayMonday),
 								string(automation.ScheduleDayTuesday),

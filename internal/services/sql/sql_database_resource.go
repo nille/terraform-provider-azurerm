@@ -435,7 +435,7 @@ func expandArmSqlServerThreatDetectionPolicy(d *pluginsdk.ResourceData, location
 }
 
 func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
-	schema := map[string]*pluginsdk.Schema{
+	return map[string]*pluginsdk.Schema{
 		"name": {
 			Type:         pluginsdk.TypeString,
 			Required:     true,
@@ -709,21 +709,4 @@ func resourceSqlDatabaseSchema() map[string]*pluginsdk.Schema {
 
 		"tags": tags.Schema(),
 	}
-
-	if !features.ThreePointOhBeta() {
-		s := schema["threat_detection_policy"].Elem.(*pluginsdk.Resource)
-		s.Schema["use_server_default"] = &pluginsdk.Schema{
-			Type:             pluginsdk.TypeString,
-			Optional:         true,
-			DiffSuppressFunc: suppress.CaseDifferenceV2Only,
-			Default:          string(sql.SecurityAlertPolicyUseServerDefaultDisabled),
-			ValidateFunc: validation.StringInSlice([]string{
-				string(sql.SecurityAlertPolicyUseServerDefaultDisabled),
-				string(sql.SecurityAlertPolicyUseServerDefaultEnabled),
-			}, features.CaseInsensitive()),
-			Deprecated: "This field is now non-functional and thus will be removed in version 3.0 of the Azure Provider",
-		}
-	}
-
-	return schema
 }

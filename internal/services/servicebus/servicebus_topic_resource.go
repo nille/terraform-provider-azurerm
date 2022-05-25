@@ -251,8 +251,11 @@ func resourceServiceBusTopicRead(d *pluginsdk.ResourceData, meta interface{}) er
 	}
 
 	d.Set("name", id.Name)
+
+	// FORK: We must maintain these properties in order to keep Pulumi mixins working.
 	d.Set("namespace_name", id.NamespaceName)
 	d.Set("resource_group_name", id.ResourceGroup)
+
 	d.Set("namespace_id", parse.NewNamespaceID(id.SubscriptionId, id.ResourceGroup, id.NamespaceName).ID())
 
 	if props := resp.SBTopicProperties; props != nil {

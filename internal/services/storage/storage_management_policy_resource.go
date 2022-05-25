@@ -145,7 +145,6 @@ func resourceStorageManagementPolicy() *pluginsdk.Resource {
 														}
 														return -1
 													}(),
-													ValidateFunc: validation.IntBetween(0, 99999),
 												},
 												"tier_to_archive_after_days_since_modification_greater_than": {
 													Type:         pluginsdk.TypeInt,
