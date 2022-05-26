@@ -12,6 +12,6 @@ func CaseDifference(_, old, new string, _ *schema.ResourceData) bool {
 
 // CaseDifferenceV2Only only suppress case difference for v2.0.
 func CaseDifferenceV2Only(_, old, new string, _ *schema.ResourceData) bool {
-	// FORK: Making the SKU case insensitive still to avoid breaking changes in Pulumi programs
+	// FORK: Force attributes to maintain case-insensitivity to avoid breaking changes in Pulumi programs.
 	return strings.EqualFold(old, new)
 }

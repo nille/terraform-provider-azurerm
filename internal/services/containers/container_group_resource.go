@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
 	"log"
 	"strings"
 	"time"
@@ -70,6 +71,7 @@ func resourceContainerGroup() *pluginsdk.Resource {
 					string(containerinstance.ContainerGroupIPAddressTypePrivate),
 					"None",
 				}, features.CaseInsensitive()),
+				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 
 			"network_profile_id": {
@@ -88,6 +90,7 @@ func resourceContainerGroup() *pluginsdk.Resource {
 					string(containerinstance.OperatingSystemTypesWindows),
 					string(containerinstance.OperatingSystemTypesLinux),
 				}, features.CaseInsensitive()),
+				DiffSuppressFunc: suppress.CaseDifferenceV2Only,
 			},
 
 			"image_registry_credential": {
