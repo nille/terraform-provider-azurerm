@@ -238,6 +238,7 @@ func resourceApplicationGateway() *pluginsdk.Resource {
 						"request_timeout": {
 							Type:         pluginsdk.TypeInt,
 							Optional:     true,
+							Default:      30,
 							ValidateFunc: validation.IntBetween(1, 86400),
 						},
 
@@ -665,7 +666,7 @@ func resourceApplicationGateway() *pluginsdk.Resource {
 
 						"priority": {
 							Type:         pluginsdk.TypeInt,
-							Optional:     true,
+							Required:     true,
 							ValidateFunc: validation.IntBetween(1, 20000),
 						},
 
