@@ -1351,7 +1351,7 @@ func flattenAzureRmCosmosDBAccountGeoLocations(account *documentdb.DatabaseAccou
 	locationSet := pluginsdk.Set{
 		F: resourceAzureRMCosmosDBAccountGeoLocationHash,
 	}
-	if account == nil {
+	if account == nil || *account.FailoverPolicies == nil {
 		return &locationSet
 	}
 

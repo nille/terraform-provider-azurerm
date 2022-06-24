@@ -55,12 +55,12 @@ resource "azurerm_cosmosdb_account" "db" {
   }
 
   geo_location {
-    location          = var.failover_location
+    location          = "eastus"
     failover_priority = 1
   }
 
   geo_location {
-    location          = azurerm_resource_group.example.location
+    location          = "eastus"
     failover_priority = 0
   }
 }
@@ -166,7 +166,7 @@ The following arguments are supported:
 
 `capabilities` Configures the capabilities to enable for this Cosmos DB account:
 
-* `name` - (Required) The capability to enable - Possible values are `AllowSelfServeUpgradeToMongo36`, `DisableRateLimitingResponses`, `EnableAggregationPipeline`, `EnableCassandra`, `EnableGremlin`, `EnableMongo`, `EnableTable`, `EnableServerless`, `MongoDBv3.4` and `mongoEnableDocLevelTTL`. 
+* `name` - (Required) The capability to enable - Possible values are `AllowSelfServeUpgradeToMongo36`, `DisableRateLimitingResponses`, `EnableAggregationPipeline`, `EnableCassandra`, `EnableGremlin`, `EnableMongo`, `EnableTable`, `EnableServerless`, `MongoDBv3.4` and `mongoEnableDocLevelTTL`.
 
 **NOTE:**  Setting `MongoDBv3.4` also requires setting `EnableMongo`.
 
