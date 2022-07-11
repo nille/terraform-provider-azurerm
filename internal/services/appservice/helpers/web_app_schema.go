@@ -1719,6 +1719,7 @@ func autoHealTriggerSchemaWindows() *pluginsdk.Schema {
 				"slow_request": {
 					Type:     pluginsdk.TypeList,
 					Optional: true,
+					MaxItems: 1,
 					Elem: &pluginsdk.Resource{
 						Schema: map[string]*pluginsdk.Schema{
 							"time_taken": {
@@ -1927,6 +1928,7 @@ func autoHealTriggerSchemaLinux() *pluginsdk.Schema {
 				"slow_request": {
 					Type:     pluginsdk.TypeList,
 					Optional: true,
+					MaxItems: 1,
 					Elem: &pluginsdk.Resource{
 						Schema: map[string]*pluginsdk.Schema{
 							"time_taken": {
@@ -3857,6 +3859,17 @@ func expandAutoHealSettingsWindows(autoHealSettings []AutoHealSettingWindows) *w
 		}
 	}
 
+	if len(triggers.SlowRequests) == 1 {
+		result.Triggers.SlowRequests = &web.SlowRequestsBasedTrigger{
+			TimeTaken:    utils.String(triggers.SlowRequests[0].TimeTaken),
+			TimeInterval: utils.String(triggers.SlowRequests[0].Interval),
+			Count:        utils.Int32(int32(triggers.SlowRequests[0].Count)),
+		}
+		if triggers.SlowRequests[0].Path != "" {
+			result.Triggers.SlowRequests.Path = utils.String(triggers.SlowRequests[0].Path)
+		}
+	}
+
 	if triggers.PrivateMemoryKB != 0 {
 		result.Triggers.PrivateBytesInKB = utils.Int32(int32(triggers.PrivateMemoryKB))
 	}
@@ -4028,6 +4041,17 @@ func expandAutoHealSettingsLinux(autoHealSettings []AutoHealSettingLinux) *web.A
 		result.Triggers.Requests = &web.RequestsBasedTrigger{
 			Count:        utils.Int32(int32(triggers.Requests[0].Count)),
 			TimeInterval: utils.String(triggers.Requests[0].Interval),
+		}
+	}
+
+	if len(triggers.SlowRequests) == 1 {
+		result.Triggers.SlowRequests = &web.SlowRequestsBasedTrigger{
+			TimeTaken:    utils.String(triggers.SlowRequests[0].TimeTaken),
+			TimeInterval: utils.String(triggers.SlowRequests[0].Interval),
+			Count:        utils.Int32(int32(triggers.SlowRequests[0].Count)),
+		}
+		if triggers.SlowRequests[0].Path != "" {
+			result.Triggers.SlowRequests.Path = utils.String(triggers.SlowRequests[0].Path)
 		}
 	}
 

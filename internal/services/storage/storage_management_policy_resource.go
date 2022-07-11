@@ -2,7 +2,6 @@ package storage
 
 import (
 	"fmt"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"log"
 	"regexp"
 	"time"
@@ -139,12 +138,7 @@ func resourceStorageManagementPolicy() *pluginsdk.Resource {
 												"tier_to_cool_after_days_since_last_access_time_greater_than": {
 													Type:     pluginsdk.TypeInt,
 													Optional: true,
-													Default: func() interface{} {
-														if !features.ThreePointOhBeta() {
-															return nil
-														}
-														return -1
-													}(),
+													Default:  -1,
 												},
 												"tier_to_archive_after_days_since_modification_greater_than": {
 													Type:         pluginsdk.TypeInt,

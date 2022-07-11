@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
 	"log"
 	"time"
 
@@ -64,12 +63,6 @@ func resourceRedisLinkedServer() *pluginsdk.Resource {
 					string(redis.ReplicationRolePrimary),
 					string(redis.ReplicationRoleSecondary),
 				}, features.CaseInsensitive()),
-				DiffSuppressFunc: func() pluginsdk.SchemaDiffSuppressFunc {
-					if !features.ThreePointOhBeta() {
-						return suppress.CaseDifference
-					}
-					return nil
-				}(),
 			},
 
 			"name": {

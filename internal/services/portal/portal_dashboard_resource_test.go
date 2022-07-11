@@ -73,10 +73,6 @@ func (PortalDashboardResource) Exists(ctx context.Context, clients *clients.Clie
 
 func (PortalDashboardResource) basic(data acceptance.TestData) string {
 	resourceName := "azurerm_portal_dashboard"
-	if !features.ThreePointOhBeta() {
-		resourceName = "azurerm_dashboard"
-	}
-
 	return fmt.Sprintf(`
 provider "azurerm" {
   features {}
@@ -129,9 +125,6 @@ DASH
 
 func (PortalDashboardResource) complete(data acceptance.TestData) string {
 	resourceName := "azurerm_portal_dashboard"
-	if !features.ThreePointOhBeta() {
-		resourceName = "azurerm_dashboard"
-	}
 
 	return fmt.Sprintf(`
 provider "azurerm" {

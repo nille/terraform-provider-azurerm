@@ -666,7 +666,7 @@ func resourceApplicationGateway() *pluginsdk.Resource {
 
 						"priority": {
 							Type:         pluginsdk.TypeInt,
-							Required:     true,
+							Optional:     true,
 							ValidateFunc: validation.IntBetween(1, 20000),
 						},
 
@@ -4447,6 +4447,9 @@ func flattenApplicationGatewayURLPathMaps(input *[]network.ApplicationGatewayURL
 
 func expandApplicationGatewayWafConfig(d *pluginsdk.ResourceData) *network.ApplicationGatewayWebApplicationFirewallConfiguration {
 	vs := d.Get("waf_configuration").([]interface{})
+	if len(vs) == 0 || vs[0] == nil {
+		return nil
+	}
 	v := vs[0].(map[string]interface{})
 
 	enabled := v["enabled"].(bool)
