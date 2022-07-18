@@ -260,7 +260,7 @@ func expandFirewallPolicyDNSSetting(input []interface{}) *network.DNSSettings {
 
 	raw := input[0].(map[string]interface{})
 	output := &network.DNSSettings{
-		Servers:     utils.ExpandStringSlice(raw["servers"].(*pluginsdk.Set).List()),
+		Servers:     utils.ExpandStringSlice(raw["servers"].([]interface{})),
 		EnableProxy: utils.Bool(raw["proxy_enabled"].(bool)),
 	}
 
@@ -637,7 +637,7 @@ func resourceFirewallPolicySchema() map[string]*pluginsdk.Schema {
 			Elem: &pluginsdk.Resource{
 				Schema: map[string]*pluginsdk.Schema{
 					"servers": {
-						Type:     pluginsdk.TypeSet,
+						Type:     pluginsdk.TypeList,
 						Optional: true,
 						Elem: &pluginsdk.Schema{
 							Type:         pluginsdk.TypeString,
