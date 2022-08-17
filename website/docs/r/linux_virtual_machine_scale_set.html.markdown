@@ -12,8 +12,6 @@ Manages a Linux Virtual Machine Scale Set.
 
 ## Disclaimers
 
-~> **NOTE:** All arguments including the administrator login and password will be stored in the raw state as plain-text. [Read more about sensitive data in state](/docs/state/sensitive-data.html).
-
 -> **NOTE:** This provider will automatically update & reimage the nodes in the Scale Set (if Required) during an Update - this behaviour can be configured using the `features` setting within the Provider block.
 
 ## Example Usage
@@ -98,7 +96,7 @@ The following arguments are supported:
 
 * `admin_username` - (Required) The username of the local administrator on each Virtual Machine Scale Set instance. Changing this forces a new resource to be created.
 
-* `instances` - (Required) The number of Virtual Machines in the Scale Set.
+* `instances` - (Optional) The number of Virtual Machines in the Scale Set. Defaults to `0`.
 
 -> **NOTE:** If you're using AutoScaling, you may wish to use [`Ignore Changes` functionality](https://www.pulumi.com/docs/intro/concepts/programming-model/#ignorechanges) to ignore changes to this field.
 
@@ -544,7 +542,7 @@ An `identity` block exports the following:
 
 ## Timeouts
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/language/resources/syntax#operation-timeouts) for certain actions:
 
 * `create` - (Defaults to 60 minutes) Used when creating the Linux Virtual Machine Scale Set.
 * `read` - (Defaults to 5 minutes) Used when reading the Linux Virtual Machine Scale Set.

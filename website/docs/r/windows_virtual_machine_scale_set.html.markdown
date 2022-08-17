@@ -12,8 +12,6 @@ Manages a Windows Virtual Machine Scale Set.
 
 ## Disclaimers
 
-~> **NOTE:** As of the **v2.86.0** (November 19, 2021) release of the provider this resource will only create Virtual Machine Scale Sets with the **Uniform** Orchestration Mode.
-
 ~> **NOTE:**: All arguments including the administrator login and password will be stored in the raw state as plain-text.
 
 -> **NOTE:** This provider will automatically update & reimage the nodes in the Scale Set (if Required) during an Update - this behaviour can be configured using the `features` setting within the Provider block.
@@ -544,7 +542,7 @@ An `identity` block exports the following:
 
 ## Timeouts
 
-The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration/resources.html#timeouts) for certain actions:
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/language/resources/syntax#operation-timeouts) for certain actions:
 
 * `create` - (Defaults to 60 minutes) Used when creating the Windows Virtual Machine Scale Set.
 * `read` - (Defaults to 5 minutes) Used when reading the Windows Virtual Machine Scale Set.
