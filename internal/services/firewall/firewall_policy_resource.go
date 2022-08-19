@@ -3,7 +3,6 @@ package firewall
 import (
 	"fmt"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
-	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
 	"log"
 	"time"
 
@@ -22,6 +21,7 @@ import (
 	logAnalytiscValidate "github.com/hashicorp/terraform-provider-azurerm/internal/services/loganalytics/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tags"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/validation"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/timeouts"
 	"github.com/hashicorp/terraform-provider-azurerm/utils"
@@ -97,6 +97,12 @@ func resourceFirewallPolicyCreateUpdate(d *pluginsdk.ResourceData, meta interfac
 	if v, ok := d.GetOk("sku"); ok {
 		props.FirewallPolicyPropertiesFormat.Sku = &network.FirewallPolicySku{
 			Tier: network.FirewallPolicySkuTier(v.(string)),
+		}
+	}
+
+	if v, ok := d.GetOk("sql_redirect_allowed"); ok {
+		props.FirewallPolicyPropertiesFormat.SQL = &network.FirewallPolicySQL{
+			AllowSQLRedirect: utils.Bool(v.(bool)),
 		}
 	}
 
@@ -200,6 +206,12 @@ func resourceFirewallPolicyRead(d *pluginsdk.ResourceData, meta interface{}) err
 		if err := d.Set("insights", flattenFirewallPolicyInsights(prop.Insights)); err != nil {
 			return fmt.Errorf(`setting "insights": %+v`, err)
 		}
+
+		if prop.SQL != nil && prop.SQL.AllowSQLRedirect != nil {
+			if err := d.Set("sql_redirect_allowed", prop.SQL.AllowSQLRedirect); err != nil {
+				return fmt.Errorf("setting `sql_redirect_allowed`: %+v", err)
+			}
+		}
 	}
 
 	flattenedIdentity, err := flattenFirewallPolicyIdentity(resp.Identity)
@@ -299,10 +311,16 @@ func expandFirewallPolicyIntrusionDetection(input []interface{}) *network.Firewa
 		})
 	}
 
+	var privateRanges []string
+	for _, v := range raw["private_ranges"].([]interface{}) {
+		privateRanges = append(privateRanges, v.(string))
+	}
+
 	return &network.FirewallPolicyIntrusionDetection{
 		Mode: network.FirewallPolicyIntrusionDetectionStateType(raw["mode"].(string)),
 		Configuration: &network.FirewallPolicyIntrusionDetectionConfiguration{
 			SignatureOverrides:    &signatureOverrides,
+			PrivateRanges:         &privateRanges,
 			BypassTrafficSettings: &trafficBypass,
 		},
 	}
@@ -462,12 +480,12 @@ func flattenFirewallPolicyIntrusionDetection(input *network.FirewallPolicyIntrus
 				description = *bypass.Description
 			}
 
-			sourceAddresses := make([]string, 0)
+			var sourceAddresses []string
 			if bypass.SourceAddresses != nil {
 				sourceAddresses = *bypass.SourceAddresses
 			}
 
-			destinationAddresses := make([]string, 0)
+			var destinationAddresses []string
 			if bypass.DestinationAddresses != nil {
 				destinationAddresses = *bypass.DestinationAddresses
 			}
@@ -499,12 +517,17 @@ func flattenFirewallPolicyIntrusionDetection(input *network.FirewallPolicyIntrus
 			})
 		}
 	}
+	var privateRanges []string
+	if privates := input.Configuration.PrivateRanges; privates != nil {
+		privateRanges = *privates
+	}
 
 	return []interface{}{
 		map[string]interface{}{
 			"mode":                string(input.Mode),
 			"signature_overrides": signatureOverrides,
 			"traffic_bypass":      trafficBypass,
+			"private_ranges":      privateRanges,
 		},
 	}
 }
@@ -729,6 +752,13 @@ func resourceFirewallPolicySchema() map[string]*pluginsdk.Schema {
 							},
 						},
 					},
+					"private_ranges": {
+						Type:     pluginsdk.TypeList,
+						Optional: true,
+						Elem: &pluginsdk.Schema{
+							Type: pluginsdk.TypeString,
+						},
+					},
 					"traffic_bypass": {
 						Type:     pluginsdk.TypeList,
 						Optional: true,
@@ -852,6 +882,11 @@ func resourceFirewallPolicySchema() map[string]*pluginsdk.Schema {
 					},
 				},
 			},
+		},
+
+		"sql_redirect_allowed": {
+			Type:     pluginsdk.TypeBool,
+			Optional: true,
 		},
 
 		"child_policies": {
