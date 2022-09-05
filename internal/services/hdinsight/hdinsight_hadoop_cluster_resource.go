@@ -96,6 +96,8 @@ func resourceHDInsightHadoopCluster() *pluginsdk.Resource {
 				},
 			},
 
+			"disk_encryption": SchemaHDInsightsDiskEncryptionProperties(),
+
 			"gateway": SchemaHDInsightsGateway(),
 
 			"metastores": SchemaHDInsightsExternalMetastores(),
@@ -275,6 +277,14 @@ func resourceHDInsightHadoopClusterCreate(d *pluginsdk.ResourceData, meta interf
 		Identity: identity,
 	}
 
+	if diskEncryptionPropertiesRaw, ok := d.GetOk("disk_encryption"); ok {
+		diskEncryptionProperties, err := ExpandHDInsightsDiskEncryptionProperties(diskEncryptionPropertiesRaw.([]interface{}))
+		if err != nil {
+			return err
+		}
+		params.Properties.DiskEncryptionProperties = diskEncryptionProperties
+	}
+
 	if v, ok := d.GetOk("security_profile"); ok {
 		params.Properties.SecurityProfile = ExpandHDInsightSecurityProfile(v.([]interface{}))
 
@@ -437,6 +447,16 @@ func resourceHDInsightHadoopClusterRead(d *pluginsdk.ResourceData, meta interfac
 
 		if edgeNodeProps := edgeNode.Properties; edgeNodeProps != nil {
 			flattenedRoles = flattenHDInsightEdgeNode(flattenedRoles, edgeNodeProps)
+		}
+
+		if props.DiskEncryptionProperties != nil {
+			diskEncryptionProps, err := FlattenHDInsightsDiskEncryptionProperties(*props.DiskEncryptionProperties)
+			if err != nil {
+				return err
+			}
+			if err := d.Set("disk_encryption", diskEncryptionProps); err != nil {
+				return fmt.Errorf("flattening `disk_encryption`: %+v", err)
+			}
 		}
 
 		if err := d.Set("roles", flattenedRoles); err != nil {

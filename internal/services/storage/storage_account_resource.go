@@ -295,6 +295,12 @@ func resourceStorageAccount() *pluginsdk.Resource {
 				Default:  true,
 			},
 
+			"public_network_access_enabled": {
+				Type:     pluginsdk.TypeBool,
+				Optional: true,
+				Default:  true,
+			},
+
 			"default_to_oauth_authentication": {
 				Type:     pluginsdk.TypeBool,
 				Optional: true,
@@ -983,6 +989,10 @@ func resourceStorageAccountCreate(d *pluginsdk.ResourceData, meta interface{}) e
 	allowSharedKeyAccess := d.Get("shared_access_key_enabled").(bool)
 	defaultToOAuthAuthentication := d.Get("default_to_oauth_authentication").(bool)
 	crossTenantReplication := d.Get("cross_tenant_replication_enabled").(bool)
+	publicNetworkAccess := storage.PublicNetworkAccessDisabled
+	if d.Get("public_network_access_enabled").(bool) {
+		publicNetworkAccess = storage.PublicNetworkAccessEnabled
+	}
 
 	accountTier := d.Get("account_tier").(string)
 	replicationType := d.Get("account_replication_type").(string)
@@ -997,6 +1007,7 @@ func resourceStorageAccountCreate(d *pluginsdk.ResourceData, meta interface{}) e
 		Tags: tags.Expand(t),
 		Kind: storage.Kind(accountKind),
 		AccountPropertiesCreateParameters: &storage.AccountPropertiesCreateParameters{
+			PublicNetworkAccess:          publicNetworkAccess,
 			EnableHTTPSTrafficOnly:       &enableHTTPSTrafficOnly,
 			NetworkRuleSet:               expandStorageAccountNetworkRules(d, tenantId),
 			IsHnsEnabled:                 &isHnsEnabled,
@@ -1504,6 +1515,22 @@ func resourceStorageAccountUpdate(d *pluginsdk.ResourceData, meta interface{}) e
 		}
 	}
 
+	if d.HasChange("public_network_access_enabled") {
+		publicNetworkAccess := storage.PublicNetworkAccessDisabled
+		if d.Get("public_network_access_enabled").(bool) {
+			publicNetworkAccess = storage.PublicNetworkAccessEnabled
+		}
+		opts := storage.AccountUpdateParameters{
+			AccountPropertiesUpdateParameters: &storage.AccountPropertiesUpdateParameters{
+				PublicNetworkAccess: publicNetworkAccess,
+			},
+		}
+
+		if _, err := client.Update(ctx, id.ResourceGroup, id.Name, opts); err != nil {
+			return fmt.Errorf("updating Azure Storage Account public_network_access_enabled %q: %+v", id.Name, err)
+		}
+	}
+
 	if d.HasChange("network_rules") {
 		opts := storage.AccountUpdateParameters{
 			AccountPropertiesUpdateParameters: &storage.AccountPropertiesUpdateParameters{
@@ -1743,6 +1770,12 @@ func resourceStorageAccountRead(d *pluginsdk.ResourceData, meta interface{}) err
 		d.Set("enable_https_traffic_only", props.EnableHTTPSTrafficOnly)
 		d.Set("is_hns_enabled", props.IsHnsEnabled)
 		d.Set("nfsv3_enabled", props.EnableNfsV3)
+
+		publicNetworkAccessEnabled := true
+		if props.PublicNetworkAccess == storage.PublicNetworkAccessDisabled {
+			publicNetworkAccessEnabled = false
+		}
+		d.Set("public_network_access_enabled", publicNetworkAccessEnabled)
 
 		if crossTenantReplication := props.AllowCrossTenantReplication; crossTenantReplication != nil {
 			d.Set("cross_tenant_replication_enabled", crossTenantReplication)
