@@ -2,9 +2,11 @@ package network
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
-	"time"
 
 	"github.com/Azure/azure-sdk-for-go/services/network/mgmt/2021-08-01/network"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/azure"
@@ -321,9 +323,16 @@ func resourceNetworkSecurityRuleRead(d *pluginsdk.ResourceData, meta interface{}
 	d.Set("resource_group_name", id.ResourceGroup)
 	d.Set("network_security_group_name", id.NetworkSecurityGroupName)
 
+	// For fixing the case insensitive issue for the NSR protocol in Azure
+	// See: https://github.com/hashicorp/terraform-provider-azurerm/issues/16092
+	protocolMap := map[string]network.SecurityRuleProtocol{}
+	for _, protocol := range network.PossibleSecurityRuleProtocolValues() {
+		protocolMap[strings.ToLower(string(protocol))] = protocol
+	}
+
 	if props := resp.SecurityRulePropertiesFormat; props != nil {
 		d.Set("description", props.Description)
-		d.Set("protocol", string(props.Protocol))
+		d.Set("protocol", string(protocolMap[strings.ToLower(string(props.Protocol))]))
 		d.Set("destination_address_prefix", props.DestinationAddressPrefix)
 		d.Set("destination_address_prefixes", props.DestinationAddressPrefixes)
 		d.Set("destination_port_range", props.DestinationPortRange)

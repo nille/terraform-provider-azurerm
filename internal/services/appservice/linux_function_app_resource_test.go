@@ -2377,9 +2377,10 @@ resource "azurerm_linux_function_app" "test" {
     }
   }
 
-  builtin_logging_enabled    = false
-  client_certificate_enabled = true
-  client_certificate_mode    = "Required"
+  builtin_logging_enabled            = false
+  client_certificate_enabled         = true
+  client_certificate_mode            = "Required"
+  client_certificate_exclusion_paths = "/foo;/bar;/hello;/world"
 
   connection_string {
     name  = "Second"
@@ -2428,7 +2429,7 @@ resource "azurerm_linux_function_app" "test" {
     }
     load_balancing_mode      = "LeastResponseTime"
     remote_debugging_enabled = true
-    remote_debugging_version = "VS2019"
+    remote_debugging_version = "VS2022"
 
     scm_ip_restriction {
       ip_address = "10.20.20.20/32"
@@ -2558,9 +2559,10 @@ resource "azurerm_linux_function_app" "test" {
     }
   }
 
-  builtin_logging_enabled    = false
-  client_certificate_enabled = true
-  client_certificate_mode    = "OptionalInteractiveUser"
+  builtin_logging_enabled            = false
+  client_certificate_enabled         = true
+  client_certificate_mode            = "OptionalInteractiveUser"
+  client_certificate_exclusion_paths = "/foo;/bar;/hello;/world"
 
   connection_string {
     name  = "First"

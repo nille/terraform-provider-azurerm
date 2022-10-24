@@ -426,6 +426,7 @@ func TestAccWindowsFunctionApp_consumptionComplete(t *testing.T) {
 			Config: r.consumptionComplete(data),
 			Check: acceptance.ComposeTestCheckFunc(
 				check.That(data.ResourceName).ExistsInAzure(r),
+				check.That(data.ResourceName).Key("site_config.0.use_32_bit_worker").HasValue("false"),
 			),
 		},
 		data.ImportStep(),
@@ -1686,9 +1687,10 @@ resource "azurerm_windows_function_app" "test" {
     }
   }
 
-  builtin_logging_enabled    = false
-  client_certificate_enabled = true
-  client_certificate_mode    = "Required"
+  builtin_logging_enabled            = false
+  client_certificate_enabled         = true
+  client_certificate_mode            = "Required"
+  client_certificate_exclusion_paths = "/foo;/bar;/hello;/world"
 
   connection_string {
     name  = "Second"
@@ -1744,7 +1746,7 @@ resource "azurerm_windows_function_app" "test" {
 
     load_balancing_mode      = "LeastResponseTime"
     remote_debugging_enabled = true
-    remote_debugging_version = "VS2019"
+    remote_debugging_version = "VS2022"
 
     scm_ip_restriction {
       ip_address = "10.20.20.20/32"
@@ -1772,7 +1774,7 @@ resource "azurerm_windows_function_app" "test" {
       }
     }
 
-    use_32_bit_worker  = true
+    use_32_bit_worker  = false
     websockets_enabled = true
     ftps_state         = "FtpsOnly"
     health_check_path  = "/health-check"
@@ -1874,9 +1876,10 @@ resource "azurerm_windows_function_app" "test" {
     }
   }
 
-  builtin_logging_enabled    = false
-  client_certificate_enabled = true
-  client_certificate_mode    = "OptionalInteractiveUser"
+  builtin_logging_enabled            = false
+  client_certificate_enabled         = true
+  client_certificate_mode            = "OptionalInteractiveUser"
+  client_certificate_exclusion_paths = "/foo;/bar;/hello;/world"
 
   connection_string {
     name  = "First"
