@@ -132,7 +132,7 @@ func schemaAppServiceFunctionAppSiteConfig() *pluginsdk.Schema {
 				"java_version": {
 					Type:         pluginsdk.TypeString,
 					Optional:     true,
-					ValidateFunc: validation.StringInSlice([]string{"1.8", "11"}, false),
+					ValidateFunc: validation.StringInSlice([]string{"1.8", "11", "17"}, false),
 				},
 
 				"elastic_instance_minimum": {

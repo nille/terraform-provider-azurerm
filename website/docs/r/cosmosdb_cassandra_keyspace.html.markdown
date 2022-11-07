@@ -60,6 +60,8 @@ The following arguments are supported:
 
 * `autoscale_settings` - (Optional) An `autoscale_settings` block as defined below. This must be set upon database creation otherwise it cannot be updated without a manual resource destroy-apply.
 
+* `autoscale_settings` - (Optional) An `autoscale_settings` block as defined below. This must be set upon database creation otherwise it cannot be updated without a manual destroy-apply.
+
 ~> **Note:** Switching between autoscale and manual throughput is not supported via this provider and must be completed via the Azure Portal and refreshed.
 
 ---
@@ -67,7 +69,6 @@ The following arguments are supported:
 An `autoscale_settings` block supports the following:
 
 * `max_throughput` - (Optional) The maximum throughput of the Cassandra KeySpace (RU/s). Must be between `1,000` and `1,000,000`. Must be set in increments of `1,000`. Conflicts with `throughput`.
-
 
 ## Attributes Reference
 

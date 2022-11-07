@@ -15,7 +15,6 @@ Manages an App Service certificate.
 
 This example provisions an App Service Certificate from a Local File.
 
-
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
