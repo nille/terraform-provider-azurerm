@@ -247,7 +247,7 @@ func expandAzureRmLoadBalancerFrontendIpConfigurations(d *pluginsdk.ResourceData
 			FrontendIPConfigurationPropertiesFormat: &properties,
 		}
 
-		zones := zones.Expand(data["zones"].(*pluginsdk.Set).List())
+		zones := zones.ExpandUntyped(data["zones"].(*pluginsdk.Set).List())
 		if len(zones) > 0 {
 			frontEndConfig.Zones = &zones
 		}
@@ -349,7 +349,7 @@ func flattenLoadBalancerFrontendIpConfiguration(ipConfigs *[]network.FrontendIPC
 			"private_ip_address_allocation": privateIPAllocationMethod,
 			"public_ip_prefix_id":           publicIpPrefixId,
 			"subnet_id":                     subnetId,
-			"zones":                         zones.Flatten(config.Zones),
+			"zones":                         zones.FlattenUntyped(config.Zones),
 		}
 
 		result = append(result, out)
