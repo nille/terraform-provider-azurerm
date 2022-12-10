@@ -220,7 +220,6 @@ func resourceServiceBusTopicCreateUpdate(d *pluginsdk.ResourceData, meta interfa
 			}
 			parameters.Properties.MaxMessageSizeInKilobytes = utils.Int64(int64(v.(int)))
 		}
-
 	}
 
 	if _, err := client.CreateOrUpdate(ctx, id, parameters); err != nil {

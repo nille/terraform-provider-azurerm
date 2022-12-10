@@ -7,7 +7,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/Azure/azure-sdk-for-go/services/web/mgmt/2021-02-01/web"
+	"github.com/Azure/azure-sdk-for-go/services/web/mgmt/2021-02-01/web" // nolint: staticcheck
 	"github.com/hashicorp/go-azure-helpers/resourcemanager/identity"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/validation"
@@ -859,7 +859,7 @@ func schemaAppServiceIpRestriction() *pluginsdk.Schema {
 					}, false),
 				},
 
-				//lintignore:XS003
+				// lintignore:XS003
 				"headers": {
 					Type:       pluginsdk.TypeList,
 					Optional:   true,
@@ -868,7 +868,7 @@ func schemaAppServiceIpRestriction() *pluginsdk.Schema {
 					ConfigMode: pluginsdk.SchemaConfigModeAttr,
 					Elem: &pluginsdk.Resource{
 						Schema: map[string]*pluginsdk.Schema{
-							//lintignore:S018
+							// lintignore:S018
 							"x_forwarded_host": {
 								Type:     pluginsdk.TypeSet,
 								Optional: true,
@@ -878,7 +878,7 @@ func schemaAppServiceIpRestriction() *pluginsdk.Schema {
 								},
 							},
 
-							//lintignore:S018
+							// lintignore:S018
 							"x_forwarded_for": {
 								Type:     pluginsdk.TypeSet,
 								Optional: true,
@@ -889,7 +889,7 @@ func schemaAppServiceIpRestriction() *pluginsdk.Schema {
 								},
 							},
 
-							//lintignore:S018
+							// lintignore:S018
 							"x_azure_fdid": {
 								Type:     pluginsdk.TypeSet,
 								Optional: true,
@@ -900,7 +900,7 @@ func schemaAppServiceIpRestriction() *pluginsdk.Schema {
 								},
 							},
 
-							//lintignore:S018
+							// lintignore:S018
 							"x_fd_health_probe": {
 								Type:     pluginsdk.TypeSet,
 								Optional: true,
@@ -963,7 +963,7 @@ func schemaAppServiceDataSourceIpRestriction() *pluginsdk.Schema {
 					ConfigMode: pluginsdk.SchemaConfigModeAttr,
 					Elem: &pluginsdk.Resource{
 						Schema: map[string]*pluginsdk.Schema{
-							//lintignore:S018
+							// lintignore:S018
 							"x_forwarded_host": {
 								Type:     pluginsdk.TypeSet,
 								Computed: true,
@@ -972,7 +972,7 @@ func schemaAppServiceDataSourceIpRestriction() *pluginsdk.Schema {
 								},
 							},
 
-							//lintignore:S018
+							// lintignore:S018
 							"x_forwarded_for": {
 								Type:     pluginsdk.TypeSet,
 								Computed: true,
@@ -981,7 +981,7 @@ func schemaAppServiceDataSourceIpRestriction() *pluginsdk.Schema {
 								},
 							},
 
-							//lintignore:S018
+							// lintignore:S018
 							"x_azure_fdid": {
 								Type:     pluginsdk.TypeSet,
 								Computed: true,
@@ -990,7 +990,7 @@ func schemaAppServiceDataSourceIpRestriction() *pluginsdk.Schema {
 								},
 							},
 
-							//lintignore:S018
+							// lintignore:S018
 							"x_fd_health_probe": {
 								Type:     pluginsdk.TypeSet,
 								Computed: true,

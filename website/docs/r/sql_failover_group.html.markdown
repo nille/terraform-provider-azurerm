@@ -67,11 +67,11 @@ The following arguments are supported:
 
 * `name` - (Required) The name of the failover group. Changing this forces a new resource to be created.
 
-* `resource_group_name` - (Required) The name of the resource group containing the SQL server
+* `resource_group_name` - (Required) The name of the resource group containing the SQL server Changing this forces a new resource to be created.
 
-* `server_name` - (Required) The name of the primary SQL server. Changing this forces a new resource to be created.
+* `server_name` - (Required) The name of the primary SQL server. Changing this forces a new resource to be created. 
 
-* `databases` - A list of database ids to add to the failover group
+* `databases` - (Optional) A list of database ids to add to the failover group
 
 -> **NOTE:** The failover group will create a secondary database for each database listed in `databases`. If the secondary databases need to be managed through this provider, they should be defined as resources and a dependency added to the failover group to ensure the secondary databases are created first.
 
