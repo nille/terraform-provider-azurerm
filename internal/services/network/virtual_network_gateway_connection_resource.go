@@ -377,7 +377,7 @@ func resourceVirtualNetworkGatewayConnectionCreateUpdate(d *pluginsdk.ResourceDa
 			return err
 		}
 
-		virtualNetworkGateway, err = vnetGatewayClient.Get(ctx, id.ResourceGroup, gwid.Name)
+		virtualNetworkGateway, err = vnetGatewayClient.Get(ctx, gwid.ResourceGroup, gwid.Name)
 		if err != nil {
 			return err
 		}
