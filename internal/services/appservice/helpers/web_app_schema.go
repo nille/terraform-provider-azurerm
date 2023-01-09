@@ -950,6 +950,7 @@ func windowsApplicationStackSchema() *pluginsdk.Schema {
 						"12-LTS",
 						"14-LTS",
 						"16-LTS",
+						"18-LTS",
 					}, false),
 					AtLeastOneOf: []string{
 						"site_config.0.application_stack.0.docker_container_name",
@@ -1226,6 +1227,7 @@ func linuxApplicationStackSchema() *pluginsdk.Schema {
 						"12-lts",
 						"14-lts",
 						"16-lts",
+						"18-lts",
 					}, false),
 					AtLeastOneOf: []string{
 						"site_config.0.application_stack.0.docker_image",

@@ -378,7 +378,7 @@ An `identity` block exports the following:
 
 ---
 
-A `shared access policy` block contains the following:
+A `shared_access_policy` block contains the following:
 
 * `key_name` - The name of the shared access policy.
 
