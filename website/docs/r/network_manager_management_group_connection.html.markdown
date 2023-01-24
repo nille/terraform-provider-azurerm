@@ -67,9 +67,9 @@ The following arguments are supported:
 
 * `name` - (Required) Specifies the name which should be used for this Network Manager Management Group Connection. Changing this forces a new Network Manager Management Group Connection to be created.
 
-* `management_group_id` (Required) Specifies the ID of the target Management Group.
+* `management_group_id` - (Required) Specifies the ID of the target Management Group. Changing this forces a new resource to be created.
 
-* `network_manager_id` - (Required) Specifies the ID of the Network Manager which the Management Group is connected to.
+* `network_manager_id` - (Required) Specifies the ID of the Network Manager which the Management Group is connected to. Changing this forces a new resource to be created.
 
 * `description` - (Optional) A description of the Network Manager Management Group Connection.
 
@@ -81,7 +81,7 @@ In addition to the Arguments listed above - the following Attributes are exporte
 * `id` - The ID of the Network Manager Management Group Connection.
 
 * `connection_state` - The Connection state of the Network Manager Management Group Connection.
-*
+
 ## Timeouts
 
 The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/language/resources/syntax#operation-timeouts) for certain actions:

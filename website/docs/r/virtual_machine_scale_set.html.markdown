@@ -321,7 +321,7 @@ The following arguments are supported:
 
 The `sku` block supports the following:
 
-* `name` - (Required) Specifies the size of virtual machines in a scale set. Changing this forces a new resource to be created.
+* `name` - (Required) Specifies the size of virtual machines in a scale set.
 * `tier` - (Optional) Specifies the tier of virtual machines in a scale set. Possible values, `standard` or `basic`.
 * `capacity` - (Required) Specifies the number of virtual machines in the scale set.
 
@@ -387,9 +387,11 @@ The `os_profile` block supports the following:
 The `os_profile_secrets` block supports the following:
 
 * `source_vault_id` - (Required) Specifies the key vault to use.
-* `vault_certificates` - (Optional) (Required, on windows machines) A collection of Vault Certificates as documented below
+* `vault_certificates` - (Optional) (Required, on Windows machines) One or more `vault_certificates` blocks as defined below.
 
-`vault_certificates` support the following:
+---
+
+A `vault_certificates` block support the following:
 
 * `certificate_url` - (Required) It is the Base64 encoding of a JSON Object that which is encoded in UTF-8 of which the contents need to be `data`, `dataType` and `password`.
 * `certificate_store` - (Required, on windows machines) Specifies the certificate store on the Virtual Machine where the certificate should be added to.
@@ -424,15 +426,18 @@ The `additional_unattend_config` block supports the following:
 The `os_profile_linux_config` block supports the following:
 
 * `disable_password_authentication` - (Optional) Specifies whether password authentication should be disabled. Defaults to `false`. Changing this forces a new resource to be created.
-* `ssh_keys` - (Optional) Specifies a collection of `path` and `key_data` to be placed on the virtual machine.
 
-~> _**Note:** Please note that the only allowed `path` is `/home/<username>/.ssh/authorized_keys` due to a limitation of Azure_
+* `ssh_keys` - (Optional) One or more `ssh_keys` blocks as defined below.
+
+~> **Note:** Please note that the only allowed `path` is `/home/<username>/.ssh/authorized_keys` due to a limitation of Azure.
+
+~> **NOTE:** At least one `ssh_keys` block is required if `disable_password_authentication` is set to `true`.
 
 ---
 
 The `network_profile` block supports the following:
 
-* `name` - (Required) Specifies the name of the network interface configuration. Changing this forces a new resource to be created.
+* `name` - (Required) Specifies the name of the network interface configuration.
 * `primary` - (Required) Indicates whether network interfaces created from the network interface configuration will be the primary NIC of the VM.
 * `ip_configuration` - (Required) An ip_configuration block as documented below.
 * `accelerated_networking` - (Optional) Specifies whether to enable accelerated networking or not.
@@ -450,7 +455,7 @@ The `dns_settings` block supports the following:
 
 The `ip_configuration` block supports the following:
 
-* `name` - (Required) Specifies name of the IP configuration. Changing this forces a new resource to be created.
+* `name` - (Required) Specifies name of the IP configuration.
 * `subnet_id` - (Required) Specifies the identifier of the subnet.
 * `application_gateway_backend_address_pool_ids` - (Optional) Specifies an array of references to backend address pools of application gateways. A scale set can reference backend address pools of multiple application gateways. Multiple scale sets can use the same application gateway.
 * `load_balancer_backend_address_pool_ids` - (Optional) Specifies an array of references to backend address pools of load balancers. A scale set can reference backend address pools of one public and one internal load balancer. Multiple scale sets cannot use the same load balancer.
@@ -469,15 +474,29 @@ The `ip_configuration` block supports the following:
 
 The `public_ip_address_configuration` block supports the following:
 
-* `name` - (Required) The name of the public IP address configuration Changing this forces a new resource to be created.
+* `name` - (Required) The name of the public IP address configuration
 * `idle_timeout` - (Required) The idle timeout in minutes. This value must be between 4 and 30.
 * `domain_name_label` - (Required) The domain name label for the DNS settings.
 
 ---
 
+A `ssh_keys` block supports the following:
+
+* `key_data` - (Required) The Public SSH Key which should be written to the `path` defined above.
+
+~> **Note:** Azure only supports RSA SSH2 key signatures of at least 2048 bits in length
+
+-> **NOTE:** Rather than defining this in-line you can source this from a local file using [the `file` function](https://www.terraform.io/docs/configuration/functions/file.html) - for example `key_data = file("~/.ssh/id_rsa.pub")`.
+
+* `path` - (Required) The path of the destination file on the virtual machine
+
+-> **NOTE:** Due to a limitation in the Azure VM Agent the only allowed `path` is `/home/{username}/.ssh/authorized_keys`.
+
+---
+
 The `storage_profile_os_disk` block supports the following:
 
-* `name` - (Optional) Specifies the disk name. Must be specified when using unmanaged disk ('managed_disk_type' property not set). Changing this forces a new resource to be created.
+* `name` - (Optional) Specifies the disk name. Must be specified when using unmanaged disk ('managed_disk_type' property not set).
 * `vhd_containers` - (Optional) Specifies the VHD URI. Cannot be used when `image` or `managed_disk_type` is specified.
 * `managed_disk_type` - (Optional) Specifies the type of managed disk to create. Value you must be either `Standard_LRS`, `StandardSSD_LRS` or `Premium_LRS`. Cannot be used when `vhd_containers` or `image` is specified.
 * `create_option` - (Required) Specifies how the virtual machine should be created. The only possible option is `FromImage`.
@@ -501,8 +520,7 @@ The `storage_profile_data_disk` block supports the following:
 
 The `storage_profile_image_reference` block supports the following:
 
-* `id` - (Optional) Specifies the ID of the (custom) image to use to create the virtual
-machine scale set, as in the [example below](#example-of-storage_profile_image_reference-with-id).
+* `id` - (Optional) Specifies the ID of the (custom) image to use to create the virtual machine scale set, as in the [example below](#example-of-storage_profile_image_reference-with-id).
 * `publisher` - (Optional) Specifies the publisher of the image used to create the virtual machines.
 * `offer` - (Optional) Specifies the offer of the image used to create the virtual machines.
 * `sku` - (Optional) Specifies the SKU of the image used to create the virtual machines.
@@ -520,7 +538,7 @@ The `boot_diagnostics` block supports the following:
 
 The `extension` block supports the following:
 
-* `name` - (Required) Specifies the name of the extension. Changing this forces a new resource to be created.
+* `name` - (Required) Specifies the name of the extension.
 * `publisher` - (Required) The publisher of the extension, available publishers can be found by using the Azure CLI.
 * `type` - (Required) The type of extension, available types for a publisher can be found using the Azure CLI.
 * `type_handler_version` - (Required) Specifies the version of the extension to use, available versions can be found using the Azure CLI.
@@ -533,7 +551,7 @@ The `extension` block supports the following:
 
 The `plan` block supports the following:
 
-* `name` - (Required) Specifies the name of the image from the marketplace. Changing this forces a new resource to be created.
+* `name` - (Required) Specifies the name of the image from the marketplace.
 * `publisher` - (Required) Specifies the publisher of the image.
 * `product` - (Required) Specifies the product of the image from the marketplace.
 
