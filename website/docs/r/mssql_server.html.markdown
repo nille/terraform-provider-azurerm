@@ -109,7 +109,7 @@ The following attributes are exported:
 
 ---
 
-`identity` exports the following:
+A `identity` block exports the following:
 
 * `principal_id` - The Principal ID for the Service Principal associated with the Identity of this SQL Server.
 
