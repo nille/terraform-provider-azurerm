@@ -313,7 +313,7 @@ func resourceMsSqlElasticPoolRead(d *pluginsdk.ResourceData, meta interface{}) e
 			return fmt.Errorf("setting `per_database_settings`: %+v", err)
 		}
 
-		maintenanceConfigId, err := publicmaintenanceconfigurations.ParsePublicMaintenanceConfigurationID(*properties.MaintenanceConfigurationID)
+		maintenanceConfigId, err := publicmaintenanceconfigurations.ParsePublicMaintenanceConfigurationIDInsensitively(*properties.MaintenanceConfigurationID)
 		if err != nil {
 			return err
 		}
