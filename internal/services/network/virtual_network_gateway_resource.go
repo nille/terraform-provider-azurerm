@@ -840,7 +840,7 @@ func flattenVirtualNetworkGatewayBgpPeeringAddresses(input *[]network.IPConfigur
 	for _, e := range *input {
 		var ipConfigName string
 		if e.IpconfigurationID != nil {
-			id, err := parse.VirtualNetworkGatewayIpConfigurationID(*e.IpconfigurationID)
+			id, err := parse.VirtualNetworkGatewayIpConfigurationIDInsensitively(*e.IpconfigurationID)
 			if err != nil {
 				return nil, err
 			}

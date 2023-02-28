@@ -12,14 +12,13 @@ import (
 	authRuleParse "github.com/hashicorp/go-azure-sdk/resource-manager/eventhub/2021-11-01/authorizationrulesnamespaces"
 	"github.com/hashicorp/go-azure-sdk/resource-manager/insights/2021-05-01-preview/diagnosticsettings"
 	"github.com/hashicorp/go-azure-sdk/resource-manager/operationalinsights/2020-08-01/workspaces"
+	"github.com/hashicorp/go-azure-sdk/resource-manager/storage/2022-05-01/storageaccounts"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/azure"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	eventhubValidate "github.com/hashicorp/terraform-provider-azurerm/internal/services/eventhub/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/monitor/validate"
-	storageParse "github.com/hashicorp/terraform-provider-azurerm/internal/services/storage/parse"
-	storageValidate "github.com/hashicorp/terraform-provider-azurerm/internal/services/storage/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/validation"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/timeouts"
@@ -83,7 +82,7 @@ func resourceMonitorDiagnosticSetting() *pluginsdk.Resource {
 			"storage_account_id": {
 				Type:         pluginsdk.TypeString,
 				Optional:     true,
-				ValidateFunc: storageValidate.StorageAccountID,
+				ValidateFunc: storageaccounts.ValidateStorageAccountID,
 				AtLeastOneOf: []string{"eventhub_authorization_rule_id", "log_analytics_workspace_id", "storage_account_id", "partner_solution_id"},
 			},
 
@@ -98,7 +97,7 @@ func resourceMonitorDiagnosticSetting() *pluginsdk.Resource {
 				Type:     pluginsdk.TypeString,
 				Optional: true,
 				ForceNew: false,
-				Default:  "AzureDiagnostics",
+				Computed: true,
 				ValidateFunc: validation.StringInSlice([]string{
 					"Dedicated",
 					"AzureDiagnostics", // Not documented in azure API, but some resource has skew. See: https://github.com/Azure/azure-rest-api-specs/issues/9281
@@ -550,7 +549,7 @@ func resourceMonitorDiagnosticSettingRead(d *pluginsdk.ResourceData, meta interf
 
 			storageAccountId := ""
 			if props.StorageAccountId != nil && *props.StorageAccountId != "" {
-				parsedId, err := storageParse.StorageAccountID(*props.StorageAccountId)
+				parsedId, err := storageaccounts.ParseStorageAccountIDInsensitively(*props.StorageAccountId)
 				if err != nil {
 					return err
 				}
@@ -565,7 +564,11 @@ func resourceMonitorDiagnosticSettingRead(d *pluginsdk.ResourceData, meta interf
 				d.Set("partner_solution_id", partnerSolutionId)
 			}
 
-			d.Set("log_analytics_destination_type", resp.Model.Properties.LogAnalyticsDestinationType)
+			logAnalyticsDestinationType := ""
+			if resp.Model.Properties.LogAnalyticsDestinationType != nil && *resp.Model.Properties.LogAnalyticsDestinationType != "" {
+				logAnalyticsDestinationType = *resp.Model.Properties.LogAnalyticsDestinationType
+			}
+			d.Set("log_analytics_destination_type", logAnalyticsDestinationType)
 
 			enabledLogs := flattenMonitorDiagnosticEnabledLogs(resp.Model.Properties.Logs)
 			if err = d.Set("enabled_log", enabledLogs); err != nil {
