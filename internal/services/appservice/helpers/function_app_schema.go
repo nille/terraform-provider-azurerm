@@ -1029,10 +1029,11 @@ func linuxFunctionAppStackSchema() *pluginsdk.Schema {
 					Description: "The version of .Net. Possible values are `3.1`, `6.0` and `7.0`",
 				},
 
+				// FORK: Removed default value due to pulumi-azure#1227
+				// These modifications can be removed once pulumi-terraform-bridge#557 is fixed.
 				"use_dotnet_isolated_runtime": {
 					Type:     pluginsdk.TypeBool,
 					Optional: true,
-					Default:  false,
 					ConflictsWith: []string{
 						"site_config.0.application_stack.0.python_version",
 						"site_config.0.application_stack.0.java_version",
