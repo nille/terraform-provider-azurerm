@@ -174,6 +174,11 @@ func resourceServiceBusNamespace() *pluginsdk.Resource {
 				ForceNew: true,
 			},
 
+			"endpoint": {
+				Type:     pluginsdk.TypeString,
+				Computed: true,
+			},
+
 			"tags": tags.Schema(),
 		},
 
@@ -341,6 +346,8 @@ func resourceServiceBusNamespaceRead(d *pluginsdk.ResourceData, meta interface{}
 				if props.MinimumTlsVersion != nil {
 					d.Set("minimum_tls_version", *props.MinimumTlsVersion)
 				}
+
+				d.Set("endpoint", props.ServiceBusEndpoint)
 			}
 		}
 	}
