@@ -1030,7 +1030,7 @@ func linuxFunctionAppStackSchema() *pluginsdk.Schema {
 				},
 
 				// FORK: Removed default value due to pulumi-azure#1227
-				// These modifications can be removed once pulumi-terraform-bridge#557 is fixed.
+				// These modifications can be removed once pulumi-terraform-bridge#577 is fixed.
 				"use_dotnet_isolated_runtime": {
 					Type:     pluginsdk.TypeBool,
 					Optional: true,
