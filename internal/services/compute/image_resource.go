@@ -7,10 +7,12 @@ import (
 	"time"
 
 	"github.com/hashicorp/go-azure-helpers/resourcemanager/commonschema"
+	"github.com/hashicorp/go-azure-sdk/resource-manager/compute/2022-03-02/disks"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/azure"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/compute/parse"
+	computeValidate "github.com/hashicorp/terraform-provider-azurerm/internal/services/compute/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tags"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/suppress"
@@ -70,7 +72,7 @@ func resourceImage() *pluginsdk.Resource {
 			"source_virtual_machine_id": {
 				Type:         pluginsdk.TypeString,
 				Optional:     true,
-				ValidateFunc: azure.ValidateResourceID,
+				ValidateFunc: computeValidate.VirtualMachineID,
 			},
 
 			"os_disk": {
@@ -103,7 +105,7 @@ func resourceImage() *pluginsdk.Resource {
 							Computed:         true,
 							Optional:         true,
 							DiffSuppressFunc: suppress.CaseDifference,
-							ValidateFunc:     azure.ValidateResourceID,
+							ValidateFunc:     disks.ValidateDiskID,
 						},
 
 						"blob_uri": {
@@ -149,7 +151,7 @@ func resourceImage() *pluginsdk.Resource {
 							Type:         pluginsdk.TypeString,
 							Optional:     true,
 							ForceNew:     true,
-							ValidateFunc: azure.ValidateResourceID,
+							ValidateFunc: disks.ValidateDiskID,
 						},
 
 						"blob_uri": {

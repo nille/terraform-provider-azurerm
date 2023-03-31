@@ -426,6 +426,12 @@ A `default_node_pool` block supports the following:
 
 ~> **Note:** A Route Table must be configured on this Subnet.
 
+* `workload_runtime` - (Optional) Specifies the workload runtime used by the node pool. The only possible value is `OCIContainer`.
+
+* `zones` - (Optional) Specifies a list of Availability Zones in which this Kubernetes Cluster should be located. Changing this forces a new Kubernetes Cluster to be created.
+
+-> **Note:** This requires that the `type` is set to `VirtualMachineScaleSets` and that `load_balancer_sku` is set to `standard`.
+
 If `enable_auto_scaling` is set to `true`, then the following fields can also be configured:
 
 * `max_count` - (Optional) The maximum number of nodes which should exist in this Node Pool. If specified this must be between `1` and `1000`.
@@ -441,12 +447,6 @@ If `enable_auto_scaling` is set to `false`, then the following fields can also b
 * `node_count` - (Optional) The number of nodes which should exist in this Node Pool. If specified this must be between `1` and `1000`.
 
 -> **Note:** If `enable_auto_scaling` is set to `false` both `min_count` and `max_count` fields need to be set to `null` or omitted from the configuration.
-
-* `workload_runtime` - (Optional) Specifies the workload runtime used by the node pool. Possible values are `OCIContainer`.
-
-* `zones` - (Optional) Specifies a list of Availability Zones in which this Kubernetes Cluster should be located. Changing this forces a new Kubernetes Cluster to be created.
-
--> **Note:** This requires that the `type` is set to `VirtualMachineScaleSets` and that `load_balancer_sku` is set to `standard`.
 
 ---
 
@@ -591,6 +591,8 @@ A `network_profile` block supports the following:
 * `dns_service_ip` - (Optional) IP address within the Kubernetes service address range that will be used by cluster service discovery (kube-dns). Changing this forces a new resource to be created.
 
 * `docker_bridge_cidr` - (Optional) IP address (in CIDR notation) used as the Docker bridge IP address on nodes. Changing this forces a new resource to be created.
+
+-> **Note:** `docker_bridge_cidr` has been deprecated as the API no longer supports it and will be removed in version 4.0 of the provider.
 
 * `ebpf_data_plane` - (Optional) Specifies the eBPF data plane used for building the Kubernetes network. Possible value is `cilium`. Changing this forces a new resource to be created.
 
@@ -844,7 +846,7 @@ A `upgrade_settings` block supports the following:
 
 ## Attributes Reference
 
-In addition to all arguments above, the following attributes are exported:
+In addition to the Arguments listed above - the following Attributes are exported:
 
 * `id` - The Kubernetes Managed Cluster ID.
 

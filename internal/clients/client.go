@@ -126,6 +126,7 @@ import (
 	trafficManager "github.com/hashicorp/terraform-provider-azurerm/internal/services/trafficmanager/client"
 	videoAnalyzer "github.com/hashicorp/terraform-provider-azurerm/internal/services/videoanalyzer/client"
 	vmware "github.com/hashicorp/terraform-provider-azurerm/internal/services/vmware/client"
+	voiceServices "github.com/hashicorp/terraform-provider-azurerm/internal/services/voiceservices/client"
 	web "github.com/hashicorp/terraform-provider-azurerm/internal/services/web/client"
 )
 
@@ -247,6 +248,7 @@ type Client struct {
 	TrafficManager        *trafficManager.Client
 	VideoAnalyzer         *videoAnalyzer.Client
 	Vmware                *vmware.Client
+	VoiceServices         *voiceServices.Client
 	Web                   *web.Client
 }
 
@@ -299,7 +301,9 @@ func (client *Client) Build(ctx context.Context, o *common.ClientOptions) error 
 		return fmt.Errorf("building clients for Dashboard: %+v", err)
 	}
 	client.DatabaseMigration = datamigration.NewClient(o)
-	client.DataBricks = databricks.NewClient(o)
+	if client.DataBricks, err = databricks.NewClient(o); err != nil {
+		return fmt.Errorf("building clients for DataBricks: %+v", err)
+	}
 	client.DataboxEdge = databoxedge.NewClient(o)
 	client.Datadog = datadog.NewClient(o)
 	client.DataFactory = datafactory.NewClient(o)
@@ -389,6 +393,7 @@ func (client *Client) Build(ctx context.Context, o *common.ClientOptions) error 
 	client.TrafficManager = trafficManager.NewClient(o)
 	client.VideoAnalyzer = videoAnalyzer.NewClient(o)
 	client.Vmware = vmware.NewClient(o)
+	client.VoiceServices = voiceServices.NewClient(o)
 	client.Web = web.NewClient(o)
 
 	return nil

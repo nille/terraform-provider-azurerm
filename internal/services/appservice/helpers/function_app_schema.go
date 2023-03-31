@@ -1506,14 +1506,12 @@ func ExpandSiteConfigLinuxFunctionApp(siteConfig []SiteConfigLinuxFunctionApp, e
 
 	linuxSiteConfig := siteConfig[0]
 
-	if metadata.ResourceData.HasChange("site_config.0.health_check_path") {
-		if linuxSiteConfig.HealthCheckPath != "" && metadata.ResourceData.HasChange("site_config.0.health_check_eviction_time_in_min") {
-			v := strconv.Itoa(linuxSiteConfig.HealthCheckEvictionTime)
-			if v == "0" {
-				appSettings = updateOrAppendAppSettings(appSettings, "WEBSITE_HEALTHCHECK_MAXPINGFAILURES", v, true)
-			} else {
-				appSettings = updateOrAppendAppSettings(appSettings, "WEBSITE_HEALTHCHECK_MAXPINGFAILURES", v, false)
-			}
+	if metadata.ResourceData.HasChange("site_config.0.health_check_path") || metadata.ResourceData.HasChange("site_config.0.health_check_eviction_time_in_min") {
+		v := strconv.Itoa(linuxSiteConfig.HealthCheckEvictionTime)
+		if v == "0" || linuxSiteConfig.HealthCheckPath == "" {
+			appSettings = updateOrAppendAppSettings(appSettings, "WEBSITE_HEALTHCHECK_MAXPINGFAILURES", v, true)
+		} else {
+			appSettings = updateOrAppendAppSettings(appSettings, "WEBSITE_HEALTHCHECK_MAXPINGFAILURES", v, false)
 		}
 	}
 
@@ -1772,14 +1770,12 @@ func ExpandSiteConfigWindowsFunctionApp(siteConfig []SiteConfigWindowsFunctionAp
 
 	windowsSiteConfig := siteConfig[0]
 
-	if metadata.ResourceData.HasChange("site_config.0.health_check_path") {
-		if windowsSiteConfig.HealthCheckPath != "" && metadata.ResourceData.HasChange("site_config.0.health_check_eviction_time_in_min") {
-			v := strconv.Itoa(windowsSiteConfig.HealthCheckEvictionTime)
-			if v == "0" {
-				appSettings = updateOrAppendAppSettings(appSettings, "WEBSITE_HEALTHCHECK_MAXPINGFAILURES", v, true)
-			} else {
-				appSettings = updateOrAppendAppSettings(appSettings, "WEBSITE_HEALTHCHECK_MAXPINGFAILURES", v, false)
-			}
+	if metadata.ResourceData.HasChange("site_config.0.health_check_path") || metadata.ResourceData.HasChange("site_config.0.health_check_eviction_time_in_min") {
+		v := strconv.Itoa(windowsSiteConfig.HealthCheckEvictionTime)
+		if v == "0" || windowsSiteConfig.HealthCheckPath == "" {
+			appSettings = updateOrAppendAppSettings(appSettings, "WEBSITE_HEALTHCHECK_MAXPINGFAILURES", v, true)
+		} else {
+			appSettings = updateOrAppendAppSettings(appSettings, "WEBSITE_HEALTHCHECK_MAXPINGFAILURES", v, false)
 		}
 	}
 
@@ -1962,6 +1958,7 @@ func FlattenSiteConfigLinuxFunctionApp(functionAppSiteConfig *web.SiteConfig) (*
 		AppCommandLine:          utils.NormalizeNilableString(functionAppSiteConfig.AppCommandLine),
 		AppScaleLimit:           int(utils.NormaliseNilableInt32(functionAppSiteConfig.FunctionAppScaleLimit)),
 		ContainerRegistryMSI:    utils.NormalizeNilableString(functionAppSiteConfig.AcrUserManagedIdentityID),
+		Cors:                    FlattenCorsSettings(functionAppSiteConfig.Cors),
 		DetailedErrorLogging:    utils.NormaliseNilableBool(functionAppSiteConfig.DetailedErrorLoggingEnabled),
 		HealthCheckPath:         utils.NormalizeNilableString(functionAppSiteConfig.HealthCheckPath),
 		Http2Enabled:            utils.NormaliseNilableBool(functionAppSiteConfig.HTTP20Enabled),
@@ -2005,26 +2002,6 @@ func FlattenSiteConfigLinuxFunctionApp(functionAppSiteConfig *web.SiteConfig) (*
 		result.DefaultDocuments = *v
 	}
 
-	if functionAppSiteConfig.Cors != nil {
-		corsEmpty := false
-		corsSettings := functionAppSiteConfig.Cors
-		cors := CorsSetting{}
-		if corsSettings.SupportCredentials != nil {
-			cors.SupportCredentials = *corsSettings.SupportCredentials
-		}
-
-		if corsSettings.AllowedOrigins != nil {
-			if len(*corsSettings.AllowedOrigins) > 0 {
-				cors.AllowedOrigins = *corsSettings.AllowedOrigins
-			} else if !cors.SupportCredentials {
-				corsEmpty = true
-			}
-		}
-		if !corsEmpty {
-			result.Cors = []CorsSetting{cors}
-		}
-	}
-
 	var appStack []ApplicationStackLinuxFunctionApp
 	if functionAppSiteConfig.LinuxFxVersion != nil {
 		decoded, err := DecodeFunctionAppLinuxFxVersion(*functionAppSiteConfig.LinuxFxVersion)
@@ -2047,6 +2024,7 @@ func FlattenSiteConfigWindowsFunctionApp(functionAppSiteConfig *web.SiteConfig) 
 		AlwaysOn:                utils.NormaliseNilableBool(functionAppSiteConfig.AlwaysOn),
 		AppCommandLine:          utils.NormalizeNilableString(functionAppSiteConfig.AppCommandLine),
 		AppScaleLimit:           int(utils.NormaliseNilableInt32(functionAppSiteConfig.FunctionAppScaleLimit)),
+		Cors:                    FlattenCorsSettings(functionAppSiteConfig.Cors),
 		DetailedErrorLogging:    utils.NormaliseNilableBool(functionAppSiteConfig.DetailedErrorLoggingEnabled),
 		HealthCheckPath:         utils.NormalizeNilableString(functionAppSiteConfig.HealthCheckPath),
 		Http2Enabled:            utils.NormaliseNilableBool(functionAppSiteConfig.HTTP20Enabled),
@@ -2087,27 +2065,6 @@ func FlattenSiteConfigWindowsFunctionApp(functionAppSiteConfig *web.SiteConfig) 
 
 	if v := functionAppSiteConfig.DefaultDocuments; v != nil {
 		result.DefaultDocuments = *v
-	}
-
-	if functionAppSiteConfig.Cors != nil {
-		corsSettings := functionAppSiteConfig.Cors
-		corsEmpty := false
-		cors := CorsSetting{}
-		if corsSettings.SupportCredentials != nil {
-			cors.SupportCredentials = *corsSettings.SupportCredentials
-		}
-
-		if corsSettings.AllowedOrigins != nil {
-			if len(*corsSettings.AllowedOrigins) > 0 {
-				cors.AllowedOrigins = *corsSettings.AllowedOrigins
-			} else if !cors.SupportCredentials {
-				corsEmpty = true
-			}
-		}
-
-		if !corsEmpty {
-			result.Cors = []CorsSetting{cors}
-		}
 	}
 
 	powershellVersion := ""
