@@ -19,7 +19,6 @@ import (
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
-	firewallValidate "github.com/hashicorp/terraform-provider-azurerm/internal/services/firewall/validate"
 	keyVaultValidate "github.com/hashicorp/terraform-provider-azurerm/internal/services/keyvault/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/network/parse"
 	networkValidate "github.com/hashicorp/terraform-provider-azurerm/internal/services/network/validate"
@@ -542,7 +541,7 @@ func resourceApplicationGateway() *pluginsdk.Resource {
 						"firewall_policy_id": {
 							Type:         pluginsdk.TypeString,
 							Optional:     true,
-							ValidateFunc: firewallValidate.FirewallPolicyID,
+							ValidateFunc: networkValidate.ApplicationGatewayWebApplicationFirewallPolicyID,
 						},
 
 						"ssl_profile_name": {
@@ -1507,7 +1506,7 @@ func resourceApplicationGateway() *pluginsdk.Resource {
 			"firewall_policy_id": {
 				Type:         pluginsdk.TypeString,
 				Optional:     true,
-				ValidateFunc: firewallValidate.FirewallPolicyID,
+				ValidateFunc: networkValidate.ApplicationGatewayWebApplicationFirewallPolicyID,
 			},
 
 			"custom_error_configuration": {
@@ -2181,9 +2180,15 @@ func resourceApplicationGatewayRead(d *pluginsdk.ResourceData, meta interface{})
 			return fmt.Errorf("setting `waf_configuration`: %+v", setErr)
 		}
 
-		if props.FirewallPolicy != nil {
-			d.Set("firewall_policy_id", props.FirewallPolicy.ID)
+		firewallPolicyId := ""
+		if props.FirewallPolicy != nil && props.FirewallPolicy.ID != nil {
+			firewallPolicyId = *props.FirewallPolicy.ID
+			policyId, err := parse.ApplicationGatewayWebApplicationFirewallPolicyIDInsensitively(firewallPolicyId)
+			if err == nil {
+				firewallPolicyId = policyId.ID()
+			}
 		}
+		d.Set("firewall_policy_id", firewallPolicyId)
 	}
 
 	return tags.FlattenAndSet(d, applicationGateway.Tags)
