@@ -1252,7 +1252,7 @@ func resourceCosmosDbAccountRead(d *pluginsdk.ResourceData, meta interface{}) er
 		for i, v := range *connStringResp.ConnectionStrings {
 			connStrings[i] = *v.ConnectionString
 			if propertyName, propertyExists := connStringPropertyMap[*v.Description]; propertyExists {
-				d.Set(propertyName, *v.ConnectionString)
+				d.Set(propertyName, v.ConnectionString) // lintignore:R001
 			}
 		}
 	}
