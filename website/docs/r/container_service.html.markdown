@@ -213,8 +213,8 @@ The following attributes are exported:
 
 * `id` - The Container Service ID.
 
-* `master_profile.fqdn` - FDQN for the master.
+* `master_profile.fqdn` - FQDN for the master.
 
-* `agent_pool_profile.fqdn` - FDQN for the agent pool.
+* `agent_pool_profile.fqdn` - FQDN for the agent pool.
 
 * `diagnostics_profile.storage_uri` - The URI of the storage account where diagnostics are stored.
